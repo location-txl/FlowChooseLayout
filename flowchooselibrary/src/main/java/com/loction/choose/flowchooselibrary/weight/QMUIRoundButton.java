@@ -3,6 +3,7 @@ package com.loction.choose.flowchooselibrary.weight;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.loction.choose.flowchooselibrary.R;
 
