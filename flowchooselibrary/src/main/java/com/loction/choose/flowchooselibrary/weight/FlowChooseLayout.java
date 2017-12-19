@@ -23,8 +23,8 @@ import java.util.List;
  * 修改内容:
  * 修改时间:
  */
-public class FlowLayout extends ViewGroup {
-    private static final String LOG_TAG = FlowLayout.class.getSimpleName();
+public class FlowChooseLayout extends ViewGroup {
+    private static final String LOG_TAG = FlowChooseLayout.class.getSimpleName();
 
     public static final int SPACING_AUTO = -65536;
 
@@ -61,11 +61,11 @@ public class FlowLayout extends ViewGroup {
     private List<Integer> mHeightForRow = new ArrayList<>();
     private List<Integer> mChildNumForRow = new ArrayList<>();
 
-    public FlowLayout(Context context) {
+    public FlowChooseLayout(Context context) {
         this(context, null);
     }
 
-    public FlowLayout(Context context, AttributeSet attrs) {
+    public FlowChooseLayout(Context context, AttributeSet attrs) {
 
         super(context, attrs);
         isNoMea = true;
@@ -149,7 +149,7 @@ public class FlowLayout extends ViewGroup {
 //                   allViewWidth = params.\
                     }
                 }
-                childSpacing = (windowWidth - allViewWidth) / (weightNum-1);
+                childSpacing = (windowWidth - allViewWidth) / (weightNum - 1);
                 mChildSpacing = childSpacing;
                 Log.e("Test", "spec==" + childSpacing);
 

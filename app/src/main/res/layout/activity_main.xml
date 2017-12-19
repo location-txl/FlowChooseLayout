@@ -5,39 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.loction.choose.flowchooselayout.MainActivity">
-<com.loction.choose.flowchooselibrary.weight.FlowLayout
-    android:layout_width="500dp"
-    android:background="@color/colorAccent"
-    app:flow="true"
-    app:weight="true"
-    app:weightNum="3"
-    android:layout_height="wrap_content">
 
-    <TextView
-        android:text="刘备"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:text="关羽dsadsadsadsa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:text="张飞"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <com.loction.choose.flowchooselibrary.weight.FlowChooseLayout
+        android:id="@+id/id_attr"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        app:flow="true"
+        app:weight="true"
+        app:weightNum="3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刘备" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关羽dsadsadsadsa" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="张飞" />
 
 
-    <TextView
-        android:text="刘备"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:text="关羽dsadsadsadsa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:text="张飞"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</com.loction.choose.flowchooselibrary.weight.FlowLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刘备" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关羽dsadsadsadsa" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="张飞" />
+    </com.loction.choose.flowchooselibrary.weight.FlowChooseLayout>
 </RelativeLayout>
