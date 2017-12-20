@@ -70,39 +70,39 @@ public class FlowChooseLayout extends ViewGroup {
         super(context, attrs);
         isNoMea = true;
         TypedArray a = context.getTheme().obtainStyledAttributes(
-                attrs, R.styleable.FlowLayout, 0, 0);
+                attrs, R.styleable.FlowChooseLayout, 0, 0);
         try {
-            mFlow = a.getBoolean(R.styleable.FlowLayout_flow, DEFAULT_FLOW);
+            mFlow = a.getBoolean(R.styleable.FlowChooseLayout_flow, DEFAULT_FLOW);
             //子View的间距
             try {
-                mChildSpacing = a.getInt(R.styleable.FlowLayout_childSpacing, DEFAULT_CHILD_SPACING);
+                mChildSpacing = a.getInt(R.styleable.FlowChooseLayout_childSpacing, DEFAULT_CHILD_SPACING);
             } catch (NumberFormatException e) {
-                mChildSpacing = a.getDimensionPixelSize(R.styleable.FlowLayout_childSpacing, (int) dpToPx(DEFAULT_CHILD_SPACING));
+                mChildSpacing = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_childSpacing, (int) dpToPx(DEFAULT_CHILD_SPACING));
             }
-            isWeight = a.getBoolean(R.styleable.FlowLayout_weight, false);
+            isWeight = a.getBoolean(R.styleable.FlowChooseLayout_weight, false);
             if (isWeight) {
-                weightNum = a.getInt(R.styleable.FlowLayout_weightNum, 0);
+                weightNum = a.getInt(R.styleable.FlowChooseLayout_weightNum, 0);
                 if (weightNum > 0) {
                     Log.e("Test", "width==" + getWidth() + "\nmessure" + getMeasuredWidth());
                 }
             }
             //最后一行子view的间距
             try {
-                mChildSpacingForLastRow = a.getInt(R.styleable.FlowLayout_childSpacingForLastRow, SPACING_UNDEFINED);
+                mChildSpacingForLastRow = a.getInt(R.styleable.FlowChooseLayout_childSpacingForLastRow, SPACING_UNDEFINED);
             } catch (NumberFormatException e) {
-                mChildSpacingForLastRow = a.getDimensionPixelSize(R.styleable.FlowLayout_childSpacingForLastRow, (int) dpToPx(DEFAULT_CHILD_SPACING));
+                mChildSpacingForLastRow = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_childSpacingForLastRow, (int) dpToPx(DEFAULT_CHILD_SPACING));
             }
             //行高
             try {
-                mRowSpacing = a.getInt(R.styleable.FlowLayout_rowSpacing, 0);
+                mRowSpacing = a.getInt(R.styleable.FlowChooseLayout_rowSpacing, 0);
             } catch (NumberFormatException e) {
-                mRowSpacing = a.getDimension(R.styleable.FlowLayout_rowSpacing, dpToPx(DEFAULT_ROW_SPACING));
+                mRowSpacing = a.getDimension(R.styleable.FlowChooseLayout_rowSpacing, dpToPx(DEFAULT_ROW_SPACING));
             }
             //最大行数
-            mMaxRows = a.getInt(R.styleable.FlowLayout_maxRows, DEFAULT_MAX_ROWS);
+            mMaxRows = a.getInt(R.styleable.FlowChooseLayout_maxRows, DEFAULT_MAX_ROWS);
             //居左还是居右
 
-            mRtl = a.getBoolean(R.styleable.FlowLayout_rtl, DEFAULT_RTL);
+            mRtl = a.getBoolean(R.styleable.FlowChooseLayout_rtl, DEFAULT_RTL);
         } finally {
             a.recycle();
         }
