@@ -7,9 +7,11 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import com.loction.choose.flowchooselibrary.R;
+import com.loction.choose.flowchooselibrary.listener.DataListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ import java.util.List;
  * 修改内容:
  * 修改时间:
  */
-public class FlowChooseLayout extends ViewGroup {
+public class FlowChooseLayout extends ViewGroup implements DataListener {
     private static final String LOG_TAG = FlowChooseLayout.class.getSimpleName();
 
     public static final int SPACING_AUTO = -65536;
@@ -52,6 +54,7 @@ public class FlowChooseLayout extends ViewGroup {
      */
     private boolean isWeight;
 
+
     /**
      * @see #isWeight  为ture时才生效
      * 一行显示几个
@@ -61,6 +64,93 @@ public class FlowChooseLayout extends ViewGroup {
     private List<Integer> mHeightForRow = new ArrayList<>();
     private List<Integer> mChildNumForRow = new ArrayList<>();
 
+
+    private Context mContext;
+
+    /**
+     * 子控件需要的属性集
+     */
+    private AttributeSet attributeSet;
+
+    /**
+     * 数据源设置方式
+     */
+    private DataListener dataListener;
+
+
+    /**
+     * 边框宽度
+     */
+    private float buttonBorderWidth;
+    /**
+     * 子view默认的背景色
+     */
+    private int buttonBackGroundColor;
+    /**
+     * 子view默认的文字颜色
+     */
+    private int buttonTextColor;
+
+    /**
+     * 子view默认的描边颜色
+     */
+    private int buttonBorderColor;
+    /**
+     * 子view的圆角高度是否为自适应为高度的一半
+     * 设置此属性为true后
+     *
+     * @see #buttonRadio
+     * 则上述属性无作用
+     */
+    private boolean buttonIsRadiusAdjustBounds;
+
+    /**
+     * 子view的四个圆角大小
+     *
+     * @see #buttonIsRadiusAdjustBounds  设置此属性为true后  此属性无作用
+     */
+    private float buttonRadio;
+
+    /**
+     * 子view的左上圆角大小
+     */
+    private float buttonTopLeftRadio;
+
+    /**
+     * 子view的右上圆角大小
+     */
+    private float buttonTopRightRadio;
+
+    /**
+     * 子view的左下方圆角大小
+     */
+    private float buttonBottomLeftRadio;
+    /**
+     * 子view的右下方圆角大小
+     */
+    private float buttonBottomRightRadio;
+
+
+    /**
+     * 子view选中的情况下文字颜色
+     */
+    private int buttonCheckTextColor;
+    /**
+     * 子view选中的情况下背景颜色
+     */
+    private int buttonCheckBackGgroundColor;
+    /**
+     * 子view选中的情况下描边颜色
+     */
+    private int buttonCheckBoradColor;
+
+    /**
+     * 子view是否允许多选
+     * 默认单选
+     */
+    private boolean isALlChecked;
+
+
     public FlowChooseLayout(Context context) {
         this(context, null);
     }
@@ -68,6 +158,9 @@ public class FlowChooseLayout extends ViewGroup {
     public FlowChooseLayout(Context context, AttributeSet attrs) {
 
         super(context, attrs);
+        this.dataListener = this;
+        this.mContext = context;
+        this.attributeSet = attrs;
         isNoMea = true;
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs, R.styleable.FlowChooseLayout, 0, 0);
@@ -103,9 +196,53 @@ public class FlowChooseLayout extends ViewGroup {
             //居左还是居右
 
             mRtl = a.getBoolean(R.styleable.FlowChooseLayout_rtl, DEFAULT_RTL);
+            //获取默认背景色
+            buttonBackGroundColor = a.getColor(R.styleable.FlowChooseLayout_backgroundColor, 0);
+            //获取默认的文字颜色
+            buttonTextColor = a.getColor(R.styleable.FlowChooseLayout_text_color, 0);
+            //获取默认的边框颜色
+            buttonBorderColor = a.getColor(R.styleable.FlowChooseLayout_borderColor, 0);
+            //获取边框宽度
+            buttonBorderWidth = a.getDimension(R.styleable.FlowChooseLayout_borderWidth, 0);
+            //获取圆角自适应
+            buttonIsRadiusAdjustBounds = a.getBoolean(R.styleable.FlowChooseLayout_isRadiusAdjustBounds, false);
+            buttonRadio = a.getDimension(R.styleable.FlowChooseLayout_radius,0);
+
+
+
         } finally {
             a.recycle();
         }
+    }
+
+    /**
+     * 设置数据源
+     *
+     * @param list
+     */
+    public void setList(List<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            QMUIRoundButton qmuiRoundButton = new QMUIRoundButton(mContext);
+
+            qmuiRoundButton.setText(dataListener.setData(list.get(i)));
+            qmuiRoundButton.setTag(false);
+            addView(qmuiRoundButton);
+        }
+    }
+
+
+    /**
+     * 内部设置content参数
+     *
+     * @param content
+     * @return
+     */
+    private QMUIRoundButton getQmuiButton(String content) {
+        QMUIRoundButton qmuiRoundButton = new QMUIRoundButton(mContext);
+        qmuiRoundButton.setText(content);
+        MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        qmuiRoundButton.setLayoutParams(params);
+        return qmuiRoundButton;
     }
 
     @Override
@@ -135,7 +272,7 @@ public class FlowChooseLayout extends ViewGroup {
             isNoMea = false;
             if (mode == MeasureSpec.EXACTLY) {
                 int allViewWidth = 0;
-
+                Log.e("mn", "个数===" + getChildCount());
                 for (int j = 0; j < weightNum; j++) {
                     View ch = getChildAt(j);
                     if (ch.getVisibility() == GONE) {
@@ -379,6 +516,11 @@ public class FlowChooseLayout extends ViewGroup {
     private float dpToPx(float dp) {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
+    @Override
+    public String setData(String string) {
+        return string;
     }
 }
 

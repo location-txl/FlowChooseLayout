@@ -114,6 +114,7 @@ public class QMUIRoundButtonDrawable extends GradientDrawable {
 
     /**
      * 根据 AttributeSet
+     *
      * @param context
      * @param attrs
      * @param defStyleAttr
@@ -121,15 +122,15 @@ public class QMUIRoundButtonDrawable extends GradientDrawable {
      */
     public static QMUIRoundButtonDrawable fromAttributeSet(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.QMUIRoundButton, defStyleAttr, 0);
-        ColorStateList colorBg = typedArray.getColorStateList(R.styleable.QMUIRoundButton_qmui_backgroundColor);
-        ColorStateList colorBorder = typedArray.getColorStateList(R.styleable.QMUIRoundButton_qmui_borderColor);
-        int borderWidth = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_qmui_borderWidth, 0);
-        boolean isRadiusAdjustBounds = typedArray.getBoolean(R.styleable.QMUIRoundButton_qmui_isRadiusAdjustBounds, false);
-        int mRadius = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_qmui_radius, 0);
-        int mRadiusTopLeft = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_qmui_radiusTopLeft, 0);
-        int mRadiusTopRight = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_qmui_radiusTopRight, 0);
-        int mRadiusBottomLeft = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_qmui_radiusBottomLeft, 0);
-        int mRadiusBottomRight = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_qmui_radiusBottomRight, 0);
+        ColorStateList colorBg = typedArray.getColorStateList(R.styleable.QMUIRoundButton_backgroundColor);
+        ColorStateList colorBorder = typedArray.getColorStateList(R.styleable.QMUIRoundButton_borderColor);
+        int borderWidth = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_borderWidth, 0);
+        boolean isRadiusAdjustBounds = typedArray.getBoolean(R.styleable.QMUIRoundButton_isRadiusAdjustBounds, false);
+        int mRadius = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_radius, 0);
+        int mRadiusTopLeft = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_radiusTopLeft, 0);
+        int mRadiusTopRight = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_radiusTopRight, 0);
+        int mRadiusBottomLeft = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_radiusBottomLeft, 0);
+        int mRadiusBottomRight = typedArray.getDimensionPixelSize(R.styleable.QMUIRoundButton_radiusBottomRight, 0);
         typedArray.recycle();
 
         QMUIRoundButtonDrawable bg = new QMUIRoundButtonDrawable();
@@ -146,7 +147,7 @@ public class QMUIRoundButtonDrawable extends GradientDrawable {
             isRadiusAdjustBounds = false;
         } else {
             bg.setCornerRadius(mRadius);
-            if(mRadius > 0){
+            if (mRadius > 0) {
                 isRadiusAdjustBounds = false;
             }
         }

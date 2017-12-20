@@ -5,24 +5,25 @@
 
 
     <!-- 圆角是否要自适应为 View 高度的一半 -->
-    <attr name="qmui_isRadiusAdjustBounds" format="boolean" />
+    <attr name="isRadiusAdjustBounds" format="boolean" />
     <!-- 同时指定四个方向的圆角大小 -->
-    <attr name="qmui_radius" format="dimension" />
+    <attr name="radius" format="dimension" />
     <!-- 指定左上方圆角的大小 -->
-    <attr name="qmui_radiusTopLeft" format="dimension" />
+    <attr name="radiusTopLeft" format="dimension" />
     <!-- 指定右上方圆角的大小 -->
-    <attr name="qmui_radiusTopRight" format="dimension" />
+    <attr name="radiusTopRight" format="dimension" />
     <!-- 指定左下方圆角的大小 -->
-    <attr name="qmui_radiusBottomLeft" format="dimension" />
+    <attr name="radiusBottomLeft" format="dimension" />
     <!-- 指定右下方圆角的大小 -->
-    <attr name="qmui_radiusBottomRight" format="dimension" />
+    <attr name="radiusBottomRight" format="dimension" />
     <!--指定view的背景色-->
-    <attr name="qmui_backgroundColor" format="color" />
+    <attr name="backgroundColor" format="color" />
 
-    <attr name="qmui_borderColor" format="color" />
+    <attr name="borderColor" format="color" />
 
-    <attr name="qmui_borderWidth" format="dimension" />
-
+    <attr name="borderWidth" format="dimension" />
+    <!--默认的字体颜色-->
+    <attr name="text_color" format="color" />
     <!--设定选中状态的字体颜色-->
     <attr name="checked_text_color" format="color" />
 
@@ -32,15 +33,15 @@
     <attr name="checked_back_border_color" format="color" />
     <declare-styleable name="QMUIRoundButton">
         <!--设置背景色-->
-        <attr name="qmui_backgroundColor" />
-        <attr name="qmui_borderColor" />
-        <attr name="qmui_borderWidth" />
-        <attr name="qmui_isRadiusAdjustBounds" />
-        <attr name="qmui_radius" />
-        <attr name="qmui_radiusTopLeft" />
-        <attr name="qmui_radiusTopRight" />
-        <attr name="qmui_radiusBottomLeft" />
-        <attr name="qmui_radiusBottomRight" />
+        <attr name="backgroundColor" />
+        <attr name="borderColor" />
+        <attr name="borderWidth" />
+        <attr name="isRadiusAdjustBounds" />
+        <attr name="radius" />
+        <attr name="radiusTopLeft" />
+        <attr name="radiusTopRight" />
+        <attr name="radiusBottomLeft" />
+        <attr name="radiusBottomRight" />
     </declare-styleable>
 
 
@@ -64,9 +65,32 @@
         <attr name="weight" format="boolean" />
         <!--均分数目   weight为false时无效-->
         <attr name="weightNum" format="integer" />
-        <!---->
+        <!--选中时的文字颜色-->
         <attr name="checked_text_color" />
+        <!--选中时的背景色-->
         <attr name="checked_back_ground" />
+        <!--选中时的边框颜色-->
         <attr name="checked_back_border_color" />
+        <!--默认的背景色-->
+        <attr name="backgroundColor" />
+        <!--默认的字体颜色-->
+        <attr name="text_color" />
+        <!--默认的边框颜色-->
+        <attr name="borderColor"/>
+        <!--边框宽度-->
+        <attr name="borderWidth"/>
+        <!--圆角是否自适应，为高度的一半-->
+        <attr name="isRadiusAdjustBounds" />
+        <!--指定四个圆角的大小-->
+        <attr name="radius" />
+        <!--指定左上方圆角的大小-->
+        <attr name="radiusTopLeft"/>
+        <!--指定右上方圆角的大小-->
+        <attr name="radiusTopRight"/>
+        <!--指定左下方圆角的大小-->
+        <attr name="radiusBottomLeft"/>
+        <!--指定右下方圆角大小-->
+        <attr name="radiusBottomRight"/>
+
     </declare-styleable>
 </resources>
