@@ -81,7 +81,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     /**
      * 边框宽度
      */
-    private float buttonBorderWidth;
+    private int buttonBorderWidth;
     /**
      * 子view默认的背景色
      */
@@ -109,26 +109,26 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
      *
      * @see #buttonIsRadiusAdjustBounds  设置此属性为true后  此属性无作用
      */
-    private float buttonRadio;
+    private int buttonRadio;
 
     /**
      * 子view的左上圆角大小
      */
-    private float buttonTopLeftRadio;
+    private int buttonTopLeftRadio;
 
     /**
      * 子view的右上圆角大小
      */
-    private float buttonTopRightRadio;
+    private int buttonTopRightRadio;
 
     /**
      * 子view的左下方圆角大小
      */
-    private float buttonBottomLeftRadio;
+    private int buttonBottomLeftRadio;
     /**
      * 子view的右下方圆角大小
      */
-    private float buttonBottomRightRadio;
+    private int buttonBottomRightRadio;
 
 
     /**
@@ -203,11 +203,18 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             //获取默认的边框颜色
             buttonBorderColor = a.getColor(R.styleable.FlowChooseLayout_borderColor, 0);
             //获取边框宽度
-            buttonBorderWidth = a.getDimension(R.styleable.FlowChooseLayout_borderWidth, 0);
+            buttonBorderWidth = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_borderWidth, 0);
             //获取圆角自适应
             buttonIsRadiusAdjustBounds = a.getBoolean(R.styleable.FlowChooseLayout_isRadiusAdjustBounds, false);
-            buttonRadio = a.getDimension(R.styleable.FlowChooseLayout_radius,0);
-
+            //获取4个圆角大小
+            buttonRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radius, 0);
+            buttonTopLeftRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusTopLeft, 0);
+            buttonTopRightRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusTopRight, 0);
+            buttonBottomLeftRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusBottomLeft, 0);
+            buttonBottomRightRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusBottomRight, 0);
+            //获取view选中的情况下的文字颜色
+            buttonCheckTextColor = a.getColor(R.styleable.FlowChooseLayout_checked_text_color, 0);
+             buttonCheckBackGgroundColor  = a.getColor(R.styleable.FlowChooseLayout_checked_back_ground,0);
 
 
         } finally {
