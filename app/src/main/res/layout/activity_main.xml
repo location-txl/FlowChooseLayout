@@ -10,7 +10,9 @@
         android:id="@+id/id_attr"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        app:backgroundColor="@color/colorAccent"
+        app:borderColor="@color/colorPrimary"
+        app:borderWidth="3dp"
         app:flow="true"
         app:weight="true"
         app:weightNum="3">
