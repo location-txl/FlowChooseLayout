@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        flowChooseLayout.setDefaultItemCheck(10);
         findViewById(R.id.id_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

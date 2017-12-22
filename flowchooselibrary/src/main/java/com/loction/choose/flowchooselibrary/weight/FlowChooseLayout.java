@@ -388,9 +388,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                         listAllCheckData.clear();
                         listAllCheckedIndex.clear();
                         QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
-                        lastQmuiRoundButton.setTextColor(buttonTextColor);
-                        lastDrawable.setBgData(buttonBackGroundColor);
-                        lastDrawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
+                        setbuttonFalse(lastQmuiRoundButton, lastDrawable);
                         lastQmuiRoundButton.setTag(false);
                         lastQmuiRoundButton.setBackground(lastDrawable);
                     }
@@ -400,16 +398,11 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                     //选中状态  TODO  增加文字颜色
                     listAllCheckData.add(data);
                     listAllCheckedIndex.add(position);
-                    drawable.setBgData(buttonCheckBackGgroundColor);
-                    qmuiRoundButton.setTextColor(buttonCheckTextColor);
-                    drawable.setStrokeData(buttonBorderWidth, buttonCheckBoradColor);
+                    setButtonTrue(drawable, qmuiRoundButton);
                     lastQmuiRoundButton = qmuiRoundButton;
                 } else {
                     //未选中状态 TODO  增加文字颜色
-
-                    qmuiRoundButton.setTextColor(buttonTextColor);
-                    drawable.setBgData(buttonBackGroundColor);
-                    drawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
+                    setbuttonFalse(qmuiRoundButton, drawable);
                     listAllCheckData.remove(data);
                     Integer integer = new Integer(position);
 
@@ -422,6 +415,12 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         qmuiRoundButton.setLayoutParams(params);
         return qmuiRoundButton;
+    }
+
+    private void setButtonTrue(QMUIRoundButtonDrawable drawable, QMUIRoundButton qmuiRoundButton) {
+        drawable.setBgData(buttonCheckBackGgroundColor);
+        qmuiRoundButton.setTextColor(buttonCheckTextColor);
+        drawable.setStrokeData(buttonBorderWidth, buttonCheckBoradColor);
     }
 
     /**
@@ -464,23 +463,39 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             final QMUIRoundButton button = (QMUIRoundButton) getChildAt(i);
             button.setTag(false);
             QMUIRoundButtonDrawable qmuiRoundButtonDrawable = (QMUIRoundButtonDrawable) button.getBackground();
-            button.setTextColor(buttonTextColor);
-            qmuiRoundButtonDrawable.setBgData(buttonBackGroundColor);
-            qmuiRoundButtonDrawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
+            setbuttonFalse(button, qmuiRoundButtonDrawable);
         }
+    }
+
+    private void setbuttonFalse(QMUIRoundButton button, QMUIRoundButtonDrawable qmuiRoundButtonDrawable) {
+        button.setTextColor(buttonTextColor);
+        qmuiRoundButtonDrawable.setBgData(buttonBackGroundColor);
+        qmuiRoundButtonDrawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
     }
 
     /**
      * 设置单个item默认选中
+     *
      * @param position
      */
     public void setDefaultItemCheck(int position) {
-          if(position>=getChildCount()){
-              return;
-          }
-
-
-
+        if (position >= getChildCount()) {
+            return;
+        }
+        final QMUIRoundButton childAt = (QMUIRoundButton) getChildAt(position);
+        QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) childAt.getBackground();
+        setButtonTrue(drawable, childAt);
+        childAt.setTag(true);
+        childAt.setBackground(drawable);
+        if (!isAllMultiSelect) {
+            if(lastQmuiRoundButton!=null){
+                QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
+                setbuttonFalse(lastQmuiRoundButton, lastDrawable);
+                lastQmuiRoundButton.setTag(false);
+                lastQmuiRoundButton.setBackground(lastDrawable);
+            }
+            lastQmuiRoundButton = childAt;
+        }
     }
 
     @Override
