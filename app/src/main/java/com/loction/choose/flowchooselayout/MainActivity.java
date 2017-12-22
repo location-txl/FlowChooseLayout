@@ -48,8 +48,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.id_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final List<DataBean> allCheckData = flowChooseLayout.<DataBean>getAllCheckData(DataBean.class);
-                Log.e("TAG",allCheckData.toString()+"\n"+flowChooseLayout.getAllCheckedIndex().toString());
+                final List<DataBean> allCheckData = flowChooseLayout.getAllCheckData(DataBean.class);
+                Log.e("TAG", allCheckData.toString() + "\n" + flowChooseLayout.getAllCheckedIndex().toString());
+            }
+        });
+
+        findViewById(R.id.id_clear).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flowChooseLayout.clearAllItemChecked();
             }
         });
 

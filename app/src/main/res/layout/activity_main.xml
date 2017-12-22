@@ -33,5 +33,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="测试" />
+        android:text="获取选中项" />
+    <Button
+        android:id="@+id/id_clear"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/id_btn"
+        android:text="清除选中项"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

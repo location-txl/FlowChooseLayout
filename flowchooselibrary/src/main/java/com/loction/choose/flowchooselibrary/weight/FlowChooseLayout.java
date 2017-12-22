@@ -9,8 +9,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
 
 
 import com.loction.choose.flowchooselibrary.R;
@@ -169,7 +167,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
 
 
     private List<Integer> listAllCheckedIndex;
-    private List<Object> list1;
+    private List<Object> listAllCheckData;
 
 
     public void setWeight(boolean weight) {
@@ -248,8 +246,8 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     public FlowChooseLayout(Context context, AttributeSet attrs) {
 
         super(context, attrs);
-        listAllCheckedIndex  = new ArrayList<>();
-        list1 = new ArrayList<>();
+        listAllCheckedIndex = new ArrayList<>();
+        listAllCheckData = new ArrayList<>();
         this.dataListener = this;
         this.mContext = context;
         this.attributeSet = attrs;
@@ -387,7 +385,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                 }
                 if (!isAllMultiSelect) {
                     if (lastQmuiRoundButton != null) {
-                        list1.clear();
+                        listAllCheckData.clear();
                         listAllCheckedIndex.clear();
                         QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
                         lastQmuiRoundButton.setTextColor(buttonTextColor);
@@ -400,7 +398,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                 QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) qmuiRoundButton.getBackground();
                 if (!isChecked) {
                     //选中状态  TODO  增加文字颜色
-                    list1.add(data);
+                    listAllCheckData.add(data);
                     listAllCheckedIndex.add(position);
                     drawable.setBgData(buttonCheckBackGgroundColor);
                     qmuiRoundButton.setTextColor(buttonCheckTextColor);
@@ -412,10 +410,10 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                     qmuiRoundButton.setTextColor(buttonTextColor);
                     drawable.setBgData(buttonBackGroundColor);
                     drawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
-                    list1.remove(data);
+                    listAllCheckData.remove(data);
                     Integer integer = new Integer(position);
 
-                    boolean boo =  listAllCheckedIndex.remove(integer);
+                    boolean boo = listAllCheckedIndex.remove(integer);
                 }
                 qmuiRoundButton.setBackground(drawable);
             }
@@ -435,13 +433,54 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         return listAllCheckedIndex;
     }
 
-    public <T> List<T> getAllCheckData(Class  cla){
-        List<T> list = new ArrayList<>();
-        for (Object o : list1) {
-            list.add((T) o);
-        }
+    /**
+     * 获取所有选中的数据源集合
+     *
+     * @param tClass 泛型标志
+     * @param <T>
+     * @return 数据源集合
+     */
+    public <T> List<T> getAllCheckData(Class<T> tClass) {
 
+        List<T> list = new ArrayList<>();
+        for (Object o : listAllCheckData) {
+            T t = null;
+            t = (T) o;
+            list.add(t);
+        }
         return list;
+    }
+
+    /**
+     * 清除所有item的选中效果
+     */
+    public void clearAllItemChecked() {
+        listAllCheckedIndex.clear();
+        listAllCheckData.clear();
+        lastQmuiRoundButton = null;
+        final int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+
+            final QMUIRoundButton button = (QMUIRoundButton) getChildAt(i);
+            button.setTag(false);
+            QMUIRoundButtonDrawable qmuiRoundButtonDrawable = (QMUIRoundButtonDrawable) button.getBackground();
+            button.setTextColor(buttonTextColor);
+            qmuiRoundButtonDrawable.setBgData(buttonBackGroundColor);
+            qmuiRoundButtonDrawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
+        }
+    }
+
+    /**
+     * 设置单个item默认选中
+     * @param position
+     */
+    public void setDefaultItemCheck(int position) {
+          if(position>=getChildCount()){
+              return;
+          }
+
+
+
     }
 
     @Override
