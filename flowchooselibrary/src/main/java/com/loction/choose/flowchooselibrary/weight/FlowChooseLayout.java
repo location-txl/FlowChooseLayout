@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.loction.choose.flowchooselibrary.R;
 import com.loction.choose.flowchooselibrary.listener.CustomDataListener;
 import com.loction.choose.flowchooselibrary.listener.DataListener;
+import com.loction.choose.flowchooselibrary.listener.OnChooseItemClick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,6 +154,12 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private boolean isAllMultiSelect;
 
 
+    /**
+     * 子view的点击事件
+     */
+    private OnChooseItemClick onChooseItemClick;
+
+
     public FlowChooseLayout(Context context) {
         this(context, null);
     }
@@ -235,19 +242,17 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
      */
     public void setList(List<String> list) {
         for (int i = 0; i < list.size(); i++) {
-            QMUIRoundButton qmuiRoundButton = getQmuiButton(dataListener.setData(list.get(i)));
+            QMUIRoundButton qmuiRoundButton = getQmuiButton(dataListener.setData(list.get(i)), i);
             addView(qmuiRoundButton);
         }
     }
 
     public <T> void setList(List<T> list, CustomDataListener<T> customDataListener) {
-        for (T o : list) {
-            QMUIRoundButton qmuiRoundButton = getQmuiButton(customDataListener.setListItemData(o));
+        for (int i = 0; i < list.size(); i++) {
+            QMUIRoundButton qmuiRoundButton = getQmuiButton(customDataListener.setListItemData(list.get(i)), i);
             addView(qmuiRoundButton);
         }
     }
-
-
 
 
     /**
@@ -256,8 +261,8 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
      * @param content
      * @return
      */
-    private QMUIRoundButton getQmuiButton(String content) {
-        QMUIRoundButton qmuiRoundButton = new QMUIRoundButton(mContext);
+    private QMUIRoundButton getQmuiButton(String content, int position) {
+        final QMUIRoundButton qmuiRoundButton = new QMUIRoundButton(mContext);
         qmuiRoundButton.setText(content);
         QMUIRoundButtonDrawable qmuiRoundButtonDrawable = new QMUIRoundButtonDrawable();
         //设置背景色
@@ -286,6 +291,15 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         } else {
             qmuiRoundButtonDrawable.setIsRadiusAdjustBounds(false);
         }
+        qmuiRoundButton.setTag(false);
+        qmuiRoundButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              boolean isChecked = (boolean) qmuiRoundButton.getTag();
+              qmuiRoundButton.setTag(!isChecked);
+//              if(onChooseItemClick)
+            }
+        });
         qmuiRoundButton.setBackground(qmuiRoundButtonDrawable);
         MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         qmuiRoundButton.setLayoutParams(params);
