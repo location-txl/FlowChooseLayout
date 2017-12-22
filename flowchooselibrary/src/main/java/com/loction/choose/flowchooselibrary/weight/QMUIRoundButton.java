@@ -28,7 +28,7 @@ import com.loction.choose.flowchooselibrary.R;
  * @see QMUIRoundButtonDrawable
  * </p>
  */
-public class QMUIRoundButton extends Button {
+public class QMUIRoundButton extends TextView {
 
     public QMUIRoundButton(Context context) {
         super(context);

@@ -15,6 +15,7 @@ import com.loction.choose.flowchooselibrary.R;
 import com.loction.choose.flowchooselibrary.listener.CustomDataListener;
 import com.loction.choose.flowchooselibrary.listener.DataListener;
 import com.loction.choose.flowchooselibrary.listener.OnChooseItemClick;
+import com.loction.choose.flowchooselibrary.util.DimmenUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -346,7 +347,11 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private QMUIRoundButton getQmuiButton(String content, final int position, final Object data) {
         final QMUIRoundButton qmuiRoundButton = new QMUIRoundButton(mContext);
         qmuiRoundButton.setText(content);
+//        qmuiRoundButton.setPadding(20,20,20,20);
         qmuiRoundButton.setTextColor(buttonTextColor);
+        int left2Riht = DimmenUtils.dp2px(mContext,30);
+        int pading = DimmenUtils.dp2px(mContext, 10);
+        qmuiRoundButton.setPadding(left2Riht, pading, left2Riht, pading);
         QMUIRoundButtonDrawable qmuiRoundButtonDrawable = new QMUIRoundButtonDrawable();
         //设置背景色
         qmuiRoundButtonDrawable.setBgData(buttonBackGroundColor);
@@ -488,7 +493,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         childAt.setTag(true);
         childAt.setBackground(drawable);
         if (!isAllMultiSelect) {
-            if(lastQmuiRoundButton!=null){
+            if (lastQmuiRoundButton != null) {
                 QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
                 setbuttonFalse(lastQmuiRoundButton, lastDrawable);
                 lastQmuiRoundButton.setTag(false);
@@ -543,8 +548,6 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                 Log.e("Test", "spec==" + childSpacing);
 
             }
-
-
         }
         float tmpSpacing = childSpacing == SPACING_AUTO ? 0 : childSpacing;
         Log.e("Test", "tmpSpac==" + tmpSpacing);
