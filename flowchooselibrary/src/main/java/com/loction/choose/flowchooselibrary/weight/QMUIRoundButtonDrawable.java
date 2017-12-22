@@ -36,6 +36,7 @@ public class QMUIRoundButtonDrawable extends GradientDrawable {
      * 设置按钮的背景色(只支持纯色,不支持 Bitmap 或 Drawable)
      */
     public void setBgData(@Nullable ColorStateList colors) {
+
         if (hasNativeStateListAPI()) {
             super.setColor(colors);
         } else {

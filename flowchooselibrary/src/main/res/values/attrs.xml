@@ -32,7 +32,7 @@
     <!--设定选中状态下的边框色-->
     <attr name="checked_back_border_color" format="color" />
     <!--设定是否多选  默认为单选-->
-    <attr name="isMultiSelect" format="boolean"/>
+    <attr name="isMultiSelect" format="boolean" />
     <declare-styleable name="QMUIRoundButton">
         <!--设置背景色-->
         <attr name="backgroundColor" />
@@ -78,22 +78,22 @@
         <!--默认的字体颜色-->
         <attr name="text_color" />
         <!--默认的边框颜色-->
-        <attr name="borderColor"/>
+        <attr name="borderColor" />
         <!--边框宽度-->
-        <attr name="borderWidth"/>
+        <attr name="borderWidth" />
         <!--圆角是否自适应，为高度的一半-->
         <attr name="isRadiusAdjustBounds" />
         <!--指定四个圆角的大小-->
         <attr name="radius" />
         <!--指定左上方圆角的大小-->
-        <attr name="radiusTopLeft"/>
+        <attr name="radiusTopLeft" />
         <!--指定右上方圆角的大小-->
-        <attr name="radiusTopRight"/>
+        <attr name="radiusTopRight" />
         <!--指定左下方圆角的大小-->
-        <attr name="radiusBottomLeft"/>
+        <attr name="radiusBottomLeft" />
         <!--指定右下方圆角大小-->
-        <attr name="radiusBottomRight"/>
+        <attr name="radiusBottomRight" />
         <!--设定是否多选 默认为单选-->
-<attr name="isMultiSelect"/>
+        <attr name="isMultiSelect" />
     </declare-styleable>
 </resources>

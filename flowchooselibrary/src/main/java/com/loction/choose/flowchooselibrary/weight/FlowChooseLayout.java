@@ -3,11 +3,13 @@ package com.loction.choose.flowchooselibrary.weight;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -160,6 +162,85 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private OnChooseItemClick onChooseItemClick;
 
 
+    /**
+     * 获取最后一个选择的控件  单选时有效
+     */
+    private QMUIRoundButton lastQmuiRoundButton;
+
+
+    private List<Integer> listAllCheckedIndex;
+    private List<Object> list1;
+
+
+    public void setWeight(boolean weight) {
+        isWeight = weight;
+    }
+
+    public void setWeightNum(int weightNum) {
+        this.weightNum = weightNum;
+    }
+
+    public void setButtonBorderWidth(int buttonBorderWidth) {
+        this.buttonBorderWidth = buttonBorderWidth;
+    }
+
+    public void setButtonBackGroundColor(ColorStateList buttonBackGroundColor) {
+        this.buttonBackGroundColor = buttonBackGroundColor;
+    }
+
+    public void setButtonTextColor(int buttonTextColor) {
+
+        this.buttonTextColor = buttonTextColor;
+    }
+
+    public void setButtonBorderColor(ColorStateList buttonBorderColor) {
+        this.buttonBorderColor = buttonBorderColor;
+    }
+
+    public void setButtonIsRadiusAdjustBounds(boolean buttonIsRadiusAdjustBounds) {
+        this.buttonIsRadiusAdjustBounds = buttonIsRadiusAdjustBounds;
+    }
+
+    public void setButtonRadio(int buttonRadio) {
+        this.buttonRadio = buttonRadio;
+    }
+
+    public void setButtonTopLeftRadio(int buttonTopLeftRadio) {
+        this.buttonTopLeftRadio = buttonTopLeftRadio;
+    }
+
+    public void setButtonTopRightRadio(int buttonTopRightRadio) {
+        this.buttonTopRightRadio = buttonTopRightRadio;
+    }
+
+    public void setButtonBottomLeftRadio(int buttonBottomLeftRadio) {
+        this.buttonBottomLeftRadio = buttonBottomLeftRadio;
+    }
+
+    public void setButtonBottomRightRadio(int buttonBottomRightRadio) {
+        this.buttonBottomRightRadio = buttonBottomRightRadio;
+    }
+
+    public void setButtonCheckTextColor(int buttonCheckTextColor) {
+        this.buttonCheckTextColor = buttonCheckTextColor;
+    }
+
+    public void setButtonCheckBackGgroundColor(ColorStateList buttonCheckBackGgroundColor) {
+        this.buttonCheckBackGgroundColor = buttonCheckBackGgroundColor;
+    }
+
+    public void setButtonCheckBoradColor(ColorStateList buttonCheckBoradColor) {
+        this.buttonCheckBoradColor = buttonCheckBoradColor;
+    }
+
+    public void setAllMultiSelect(boolean allMultiSelect) {
+        isAllMultiSelect = allMultiSelect;
+    }
+
+    public void setOnChooseItemClick(OnChooseItemClick onChooseItemClick) {
+        this.onChooseItemClick = onChooseItemClick;
+    }
+
     public FlowChooseLayout(Context context) {
         this(context, null);
     }
@@ -167,6 +248,8 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     public FlowChooseLayout(Context context, AttributeSet attrs) {
 
         super(context, attrs);
+        listAllCheckedIndex  = new ArrayList<>();
+        list1 = new ArrayList<>();
         this.dataListener = this;
         this.mContext = context;
         this.attributeSet = attrs;
@@ -208,7 +291,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             //获取默认背景色
             buttonBackGroundColor = a.getColorStateList(R.styleable.FlowChooseLayout_backgroundColor);
             //获取默认的文字颜色
-            buttonTextColor = a.getColor(R.styleable.FlowChooseLayout_text_color, 0);
+            buttonTextColor = a.getColor(R.styleable.FlowChooseLayout_text_color, Color.parseColor("#000000"));
             //获取默认的边框颜色
             buttonBorderColor = a.getColorStateList(R.styleable.FlowChooseLayout_borderColor);
             //获取边框宽度
@@ -222,7 +305,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             buttonBottomLeftRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusBottomLeft, 0);
             buttonBottomRightRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusBottomRight, 0);
             //获取view选中的情况下的文字颜色
-            buttonCheckTextColor = a.getColor(R.styleable.FlowChooseLayout_checked_text_color, 0);
+            buttonCheckTextColor = a.getColor(R.styleable.FlowChooseLayout_checked_text_color, Color.parseColor("#000000"));
             //获取view选中的情况下的背景色
             buttonCheckBackGgroundColor = a.getColorStateList(R.styleable.FlowChooseLayout_checked_back_ground);
             //获取view选中的情况下的边框颜色
@@ -242,14 +325,15 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
      */
     public void setList(List<String> list) {
         for (int i = 0; i < list.size(); i++) {
-            QMUIRoundButton qmuiRoundButton = getQmuiButton(dataListener.setData(list.get(i)), i);
+            QMUIRoundButton qmuiRoundButton = getQmuiButton(dataListener.setData(list.get(i)), i, list.get(i));
             addView(qmuiRoundButton);
         }
     }
 
     public <T> void setList(List<T> list, CustomDataListener<T> customDataListener) {
+
         for (int i = 0; i < list.size(); i++) {
-            QMUIRoundButton qmuiRoundButton = getQmuiButton(customDataListener.setListItemData(list.get(i)), i);
+            QMUIRoundButton qmuiRoundButton = getQmuiButton(customDataListener.setListItemData(list.get(i)), i, list.get(i));
             addView(qmuiRoundButton);
         }
     }
@@ -261,9 +345,10 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
      * @param content
      * @return
      */
-    private QMUIRoundButton getQmuiButton(String content, int position) {
+    private QMUIRoundButton getQmuiButton(String content, final int position, final Object data) {
         final QMUIRoundButton qmuiRoundButton = new QMUIRoundButton(mContext);
         qmuiRoundButton.setText(content);
+        qmuiRoundButton.setTextColor(buttonTextColor);
         QMUIRoundButtonDrawable qmuiRoundButtonDrawable = new QMUIRoundButtonDrawable();
         //设置背景色
         qmuiRoundButtonDrawable.setBgData(buttonBackGroundColor);
@@ -295,15 +380,68 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         qmuiRoundButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-              boolean isChecked = (boolean) qmuiRoundButton.getTag();
-              qmuiRoundButton.setTag(!isChecked);
-//              if(onChooseItemClick)
+                boolean isChecked = (boolean) qmuiRoundButton.getTag();
+                qmuiRoundButton.setTag(!isChecked);
+                if (onChooseItemClick != null) {
+                    onChooseItemClick.onItemDataListener(position, view, !isChecked);
+                }
+                if (!isAllMultiSelect) {
+                    if (lastQmuiRoundButton != null) {
+                        list1.clear();
+                        listAllCheckedIndex.clear();
+                        QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
+                        lastQmuiRoundButton.setTextColor(buttonTextColor);
+                        lastDrawable.setBgData(buttonBackGroundColor);
+                        lastDrawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
+                        lastQmuiRoundButton.setTag(false);
+                        lastQmuiRoundButton.setBackground(lastDrawable);
+                    }
+                }
+                QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) qmuiRoundButton.getBackground();
+                if (!isChecked) {
+                    //选中状态  TODO  增加文字颜色
+                    list1.add(data);
+                    listAllCheckedIndex.add(position);
+                    drawable.setBgData(buttonCheckBackGgroundColor);
+                    qmuiRoundButton.setTextColor(buttonCheckTextColor);
+                    drawable.setStrokeData(buttonBorderWidth, buttonCheckBoradColor);
+                    lastQmuiRoundButton = qmuiRoundButton;
+                } else {
+                    //未选中状态 TODO  增加文字颜色
+
+                    qmuiRoundButton.setTextColor(buttonTextColor);
+                    drawable.setBgData(buttonBackGroundColor);
+                    drawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
+                    list1.remove(data);
+                    Integer integer = new Integer(position);
+
+                    boolean boo =  listAllCheckedIndex.remove(integer);
+                }
+                qmuiRoundButton.setBackground(drawable);
             }
         });
         qmuiRoundButton.setBackground(qmuiRoundButtonDrawable);
         MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         qmuiRoundButton.setLayoutParams(params);
         return qmuiRoundButton;
+    }
+
+    /**
+     * 获取所有选中的下标集合
+     *
+     * @return
+     */
+    public List<Integer> getAllCheckedIndex() {
+        return listAllCheckedIndex;
+    }
+
+    public <T> List<T> getAllCheckData(Class  cla){
+        List<T> list = new ArrayList<>();
+        for (Object o : list1) {
+            list.add((T) o);
+        }
+
+        return list;
     }
 
     @Override
@@ -314,7 +452,6 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-
         mHorizontalSpacingForRow.clear();
         mChildNumForRow.clear();
         mHeightForRow.clear();
