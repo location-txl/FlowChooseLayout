@@ -1,5 +1,6 @@
 package com.loction.choose.flowchooselayout;
 
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,12 +26,35 @@ public class MainActivity extends AppCompatActivity {
         list.add("关羽");
         list.add("刘备");
         List<DataBean> list1 = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            DataBean dataBean = new DataBean();
-            dataBean.setName("测试");
-            list1.add(dataBean);
-        }
-
+//        for (int i = 0; i < 30; i++) {
+//            DataBean dataBean = new DataBean();
+//            dataBean.setName("测试"+i);
+//            list1.add(dataBean);
+//        }
+        DataBean dataBean = new DataBean();
+        dataBean.setName("张飞");
+        DataBean dataBean1 = new DataBean();
+        dataBean1.setName("关羽");
+        DataBean dataBean2 = new DataBean();
+        dataBean2.setName("刘备");
+        DataBean dataBean3 = new DataBean();
+        dataBean3.setName("得玛西亚之力");
+        DataBean dataBean4 = new DataBean();
+        dataBean4.setName("德玛西亚皇子");
+        DataBean dataBean5 = new DataBean();
+        dataBean5.setName("德邦总管");
+        DataBean dataBean6 = new DataBean();
+        dataBean6.setName("疾风剑豪");
+        DataBean dataBean7 = new DataBean();
+        dataBean7.setName("奥利安娜");
+       list1.add(dataBean);
+       list1.add(dataBean1);
+       list1.add(dataBean2);
+       list1.add(dataBean3);
+       list1.add(dataBean4);
+       list1.add(dataBean5);
+       list1.add(dataBean6);
+       list1.add(dataBean7);
 
         flowChooseLayout.setList(list1, new CustomDataListener<DataBean>() {
             @Override

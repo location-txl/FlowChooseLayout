@@ -68,6 +68,11 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private List<Integer> mHeightForRow = new ArrayList<>();
     private List<Integer> mChildNumForRow = new ArrayList<>();
 
+    /**
+     * 存储权重时每行的行间距
+     */
+    private List<Integer> mChildWeightSpacing = new ArrayList<>();
+
 
     private Context mContext;
 
@@ -349,7 +354,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         qmuiRoundButton.setText(content);
 //        qmuiRoundButton.setPadding(20,20,20,20);
         qmuiRoundButton.setTextColor(buttonTextColor);
-        int left2Riht = DimmenUtils.dp2px(mContext,30);
+        int left2Riht = DimmenUtils.dp2px(mContext, 30);
         int pading = DimmenUtils.dp2px(mContext, 10);
         qmuiRoundButton.setPadding(left2Riht, pading, left2Riht, pading);
         QMUIRoundButtonDrawable qmuiRoundButtonDrawable = new QMUIRoundButtonDrawable();
@@ -525,30 +530,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         final int windowWidth = MeasureSpec.getSize(widthMeasureSpec);
         final int mode = MeasureSpec.getMode(widthMeasureSpec);
         Log.e("Test", "size==" + windowWidth);
-        if (isWeight && weightNum > 0 && isNoMea) {
-            isNoMea = false;
-            if (mode == MeasureSpec.EXACTLY) {
-                int allViewWidth = 0;
-                Log.e("mn", "个数===" + getChildCount());
-                for (int j = 0; j < weightNum; j++) {
-                    View ch = getChildAt(j);
-                    if (ch.getVisibility() == GONE) {
-                        continue;
-                    }
-                    final LayoutParams layoutParams = ch.getLayoutParams();
-                    if (layoutParams instanceof MarginLayoutParams) {
-                        measureChildWithMargins(ch, widthMeasureSpec, 0, heightMeasureSpec, measuredHeight);
-                        MarginLayoutParams params = (MarginLayoutParams) layoutParams;
-                        allViewWidth = allViewWidth + ch.getMeasuredWidth() + params.leftMargin + params.rightMargin;
-//                   allViewWidth = params.\
-                    }
-                }
-                childSpacing = (windowWidth - allViewWidth) / (weightNum - 1);
-                mChildSpacing = childSpacing;
-                Log.e("Test", "spec==" + childSpacing);
-
-            }
-        }
+        getChildSpacing(widthMeasureSpec, heightMeasureSpec, measuredHeight, childSpacing, windowWidth, mode, 0);
         float tmpSpacing = childSpacing == SPACING_AUTO ? 0 : childSpacing;
         Log.e("Test", "tmpSpac==" + tmpSpacing);
         for (int i = 0; i < childCount; i++) {
@@ -573,9 +555,15 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             Log.e("Test", "dui==" + child.getMeasuredWidth());
             int childHeight = child.getMeasuredHeight() + verticalMargin;
             if (allowFlow && rowWidth + childWidth > rowSize) { // Need flow to next row
-
-                mHorizontalSpacingForRow.add(
-                        getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
+                Log.e("TAG", "换行==" + i);
+                  if(isWeight){
+                      mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
+                      Log.e("TR",mHorizontalSpacingForRow.toString());
+                      Log.e("TR",mChildWeightSpacing.get(mHorizontalSpacingForRow.size())+"dsa");
+                  }else{
+                      mHorizontalSpacingForRow.add(
+                              getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
+                  }
 
                 mChildNumForRow.add(childNumInRow);
                 mHeightForRow.add(maxChildHeightInRow);
@@ -588,8 +576,15 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                 rowWidth = childWidth + (int) tmpSpacing;
                 maxChildHeightInRow = childHeight;
             } else {
+
                 childNumInRow++;
-                rowWidth += childWidth + tmpSpacing;
+                if(isWeight){
+                    Log.e("GHF","width==="+mChildWeightSpacing.get(mHorizontalSpacingForRow.size()));
+                    rowWidth += childWidth + mChildWeightSpacing.get(mHorizontalSpacingForRow.size());
+                }else{
+
+                    rowWidth += childWidth + tmpSpacing;
+                }
                 maxChildHeightInRow = Math.max(maxChildHeightInRow, childHeight);
             }
         }
@@ -606,8 +601,15 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             mHorizontalSpacingForRow.add(
                     getSpacingForRow(mChildSpacingForLastRow, rowSize, rowWidth, childNumInRow));
         } else {
+            if(isWeight){
+                mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
+
+            }else{
+
+
             mHorizontalSpacingForRow.add(
                     getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
+            }
         }
 
         mChildNumForRow.add(childNumInRow);
@@ -650,6 +652,74 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         measuredHeight = heightMode == MeasureSpec.EXACTLY ? heightSize : measuredHeight;
 
         setMeasuredDimension(measuredWidth, measuredHeight);
+    }
+
+    private int getChildSpacing(int widthMeasureSpec, int heightMeasureSpec, int measuredHeight, int childSpacing, int windowWidth, int mode, int startIndex) {
+        if (isWeight && weightNum > 0 && isNoMea) {
+            isNoMea = false;
+
+            if (mode == MeasureSpec.EXACTLY) {
+
+                final int i = setChildRow(startIndex, (startIndex + 3) < getChildCount() ? startIndex + 3 : getChildCount(), widthMeasureSpec, heightMeasureSpec, measuredHeight, windowWidth);
+
+
+//                int allViewWidth = 0;
+//                Log.e("mn", "个数===" + getChildCount());
+//                for (int j = startIndex; j < weightNum + startIndex; j++) {
+//                    Log.e("Test", "spec==" + j);
+//
+//                    View ch = getChildAt(j);
+//                    if (ch == null) {
+//                        return childSpacing;
+//                    }
+//                    if (ch.getVisibility() == GONE) {
+//                        continue;
+//                    }
+//                    final LayoutParams layoutParams = ch.getLayoutParams();
+//                    if (layoutParams instanceof MarginLayoutParams) {
+//                        measureChildWithMargins(ch, widthMeasureSpec, 0, heightMeasureSpec, measuredHeight);
+//                        MarginLayoutParams params = (MarginLayoutParams) layoutParams;
+//                        allViewWidth = allViewWidth + ch.getMeasuredWidth() + params.leftMargin + params.rightMargin;
+////                   allViewWidth = params.\
+//                    }
+//                }
+//                childSpacing = (windowWidth - allViewWidth) / (weightNum - 1);
+//                mChildSpacing = childSpacing;
+//                Log.e("Test", "spec==" + childSpacing);
+
+            }
+        }
+        return childSpacing;
+    }
+
+    private int setChildRow(int startIndex, int endIndex, int widthMeasureSpec, int heightMeasureSpec, int measuredHeight, int windowWidth) {
+        int allViewWidth = 0;
+        int childSpacing = 0;
+        Log.e("mn", "个数===" + getChildCount());
+        for (int j = startIndex; j < endIndex; j++) {
+            Log.e("Test", "spec==" + j);
+
+            View ch = getChildAt(j);
+
+            if (ch.getVisibility() == GONE) {
+                continue;
+            }
+            final LayoutParams layoutParams = ch.getLayoutParams();
+            if (layoutParams instanceof MarginLayoutParams) {
+                measureChildWithMargins(ch, widthMeasureSpec, 0, heightMeasureSpec, measuredHeight);
+                MarginLayoutParams params = (MarginLayoutParams) layoutParams;
+                allViewWidth = allViewWidth + ch.getMeasuredWidth() + params.leftMargin + params.rightMargin;
+//                   allViewWidth = params.\
+            }
+        }
+        childSpacing = (windowWidth - allViewWidth) / (weightNum - 1);
+        mChildWeightSpacing.add(childSpacing);
+        if (endIndex < getChildCount()) {
+            setChildRow(endIndex, (endIndex + 3) < getChildCount() ? endIndex + 3 : getChildCount(), widthMeasureSpec, heightMeasureSpec, measuredHeight, windowWidth);
+        }
+//        mChildSpacing = childSpacing;
+        Log.e("Test", "spec==" + childSpacing);
+        return endIndex;
     }
 
     @Override

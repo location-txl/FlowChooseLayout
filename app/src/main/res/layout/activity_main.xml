@@ -17,6 +17,7 @@
         app:checked_back_ground="@color/colorPrimary"
         app:checked_text_color="#000000"
         app:flow="true"
+        app:radius="10dp"
         app:text_color="#ffffff"
         app:weight="true"
         app:isMultiSelect="false"
