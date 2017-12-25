@@ -483,7 +483,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         lastQmuiRoundButton = null;
         final int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
-
+//测试
             final QMUIRoundButton button = (QMUIRoundButton) getChildAt(i);
             button.setTag(false);
             QMUIRoundButtonDrawable qmuiRoundButtonDrawable = (QMUIRoundButtonDrawable) button.getBackground();
