@@ -32,6 +32,13 @@ import java.util.List;
 public class FlowChooseLayout extends ViewGroup implements DataListener {
     private static final String LOG_TAG = FlowChooseLayout.class.getSimpleName();
 
+    /**
+     * 三种状态  我很生气
+     */
+    private final int CHECK_TYPE_ONE = 0x001;
+    private final int CHECK_TYPE_TWO = 0x002;
+    private final int CHECK_TYPE_THREE = 0x003;
+
     public static final int SPACING_AUTO = -65536;
 
     public static final int SPACING_ALIGN = -65537;
@@ -463,6 +470,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
 
     /**
      * 返回默认泛型为String的集合
+     *
      * @return
      */
     public List<String> getAllCheckData() {
