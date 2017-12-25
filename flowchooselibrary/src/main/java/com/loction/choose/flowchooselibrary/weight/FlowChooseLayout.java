@@ -498,7 +498,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     }
 
     /**
-     * 设置单个item默认选中
+     * 设置单个item默认选中123
      *
      * @param position 默认选中的item的索引
      */
