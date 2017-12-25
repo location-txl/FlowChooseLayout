@@ -394,7 +394,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                     onChooseItemClick.onItemDataListener(position, view, !isChecked);
                 }
                 if (!isAllMultiSelect) {
-                    if (lastQmuiRoundButton != null) {
+                    if (lastQmuiRoundButton != null && lastQmuiRoundButton != qmuiRoundButton) {
                         listAllCheckData.clear();
                         listAllCheckedIndex.clear();
                         QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
@@ -556,14 +556,14 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             int childHeight = child.getMeasuredHeight() + verticalMargin;
             if (allowFlow && rowWidth + childWidth > rowSize) { // Need flow to next row
                 Log.e("TAG", "换行==" + i);
-                  if(isWeight){
-                      mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
-                      Log.e("TR",mHorizontalSpacingForRow.toString());
-                      Log.e("TR",mChildWeightSpacing.get(mHorizontalSpacingForRow.size())+"dsa");
-                  }else{
-                      mHorizontalSpacingForRow.add(
-                              getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
-                  }
+                if (isWeight) {
+                    mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
+                    Log.e("TR", mHorizontalSpacingForRow.toString());
+                    Log.e("TR", mChildWeightSpacing.get(mHorizontalSpacingForRow.size()) + "dsa");
+                } else {
+                    mHorizontalSpacingForRow.add(
+                            getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
+                }
 
                 mChildNumForRow.add(childNumInRow);
                 mHeightForRow.add(maxChildHeightInRow);
@@ -578,10 +578,10 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             } else {
 
                 childNumInRow++;
-                if(isWeight){
-                    Log.e("GHF","width==="+mChildWeightSpacing.get(mHorizontalSpacingForRow.size()));
+                if (isWeight) {
+                    Log.e("GHF", "width===" + mChildWeightSpacing.get(mHorizontalSpacingForRow.size()));
                     rowWidth += childWidth + mChildWeightSpacing.get(mHorizontalSpacingForRow.size());
-                }else{
+                } else {
 
                     rowWidth += childWidth + tmpSpacing;
                 }
@@ -601,14 +601,14 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             mHorizontalSpacingForRow.add(
                     getSpacingForRow(mChildSpacingForLastRow, rowSize, rowWidth, childNumInRow));
         } else {
-            if(isWeight){
+            if (isWeight) {
                 mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
 
-            }else{
+            } else {
 
 
-            mHorizontalSpacingForRow.add(
-                    getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
+                mHorizontalSpacingForRow.add(
+                        getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
             }
         }
 
