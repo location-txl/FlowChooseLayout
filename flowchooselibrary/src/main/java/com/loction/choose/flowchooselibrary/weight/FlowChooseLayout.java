@@ -454,8 +454,22 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         List<T> list = new ArrayList<>();
         for (Object o : listAllCheckData) {
             T t = null;
+
             t = (T) o;
             list.add(t);
+        }
+        return list;
+    }
+
+    /**
+     * 返回默认泛型为String的集合
+     * @return
+     */
+    public List<String> getAllCheckData() {
+        List<String> list = new ArrayList<>();
+        for (Object o : listAllCheckData) {
+
+            list.add((String) o);
         }
         return list;
     }
@@ -486,7 +500,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     /**
      * 设置单个item默认选中
      *
-     * @param position
+     * @param position 默认选中的item的索引
      */
     public void setDefaultItemCheck(int position) {
         if (position >= getChildCount()) {
