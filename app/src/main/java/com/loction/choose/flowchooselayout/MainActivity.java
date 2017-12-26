@@ -1,5 +1,6 @@
 package com.loction.choose.flowchooselayout;
 
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final FlowChooseLayout flowChooseLayout = findViewById(R.id.id_attr);
+        flowChooseLayout.setButtonThreeTextColor(Color.parseColor("#FFFFFF"));
+        flowChooseLayout.setTypeThreeBack(Color.parseColor("#000000"));
+        flowChooseLayout.setTypeThreeBorad(Color.parseColor("#000000"));
+//        flowChooseLayout.setSecond(true);
         List<String> list = new ArrayList<>();
         list.add("张飞");
         list.add("关羽");
@@ -62,25 +67,24 @@ public class MainActivity extends AppCompatActivity {
                 return o.getName();
             }
         });
-        flowChooseLayout.setOnChooseItemClick(new OnChooseItemClick() {
-            @Override
-            public void onItemDataListener(int position, View view, boolean isChecked) {
-                Toast.makeText(MainActivity.this, "position===" + position + "\n选中==" + (isChecked ? "选中" : "未选中"), Toast.LENGTH_SHORT).show();
+//        flowChooseLayout.setOnChooseItemClick(new OnChooseItemClick() {
+//            @Override
+//            public void onItemDataListener(int position, View view, boolean isChecked) {
+//                Toast.makeText(MainActivity.this, "position===" + position + "\n选中==" + (isChecked ? "选中" : "未选中"), Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
-            }
-        });
-
-        flowChooseLayout.setDefaultItemCheck(10);
         findViewById(R.id.id_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                final List<DataBean> allCheckData = flowChooseLayout.getAllCheckData(DataBean.class);
-                final List<String> allCheckData = flowChooseLayout.getAllCheckData(String.class);
+                final List<DataBean> allCheckData = flowChooseLayout.getAllCheckData(DataBean.class);
+//                final List<String> allCheckData = flowChooseLayout.getAllCheckData(String.class);
 //                flowChooseLayout.getAllCheckData(String.class);
-                for (String allCheckDatum : allCheckData) {
-
-                }
-//                Log.e("TAG", allCheckData.toString() + "\n" + flowChooseLayout.getAllCheckedIndex().toString());
+//                for (String allCheckDatum : allCheckData) {
+//
+//                }
+                Log.e("TAG", allCheckData.toString() + "\n" + flowChooseLayout.getAllCheckedIndex().toString());
             }
         });
 

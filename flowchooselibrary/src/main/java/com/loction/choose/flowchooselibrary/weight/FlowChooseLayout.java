@@ -1,6 +1,7 @@
 package com.loction.choose.flowchooselibrary.weight;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import com.loction.choose.flowchooselibrary.util.DimmenUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * 项目名称: 新医疗(HD)
@@ -33,11 +35,11 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private static final String LOG_TAG = FlowChooseLayout.class.getSimpleName();
 
     /**
-     * 三种状态  我很生气
+     * 三种状态
      */
-    private final int CHECK_TYPE_ONE = 0x001;
-    private final int CHECK_TYPE_TWO = 0x002;
-    private final int CHECK_TYPE_THREE = 0x003;
+    public static final int CHECK_TYPE_ONE = 0x001;
+    public static final int CHECK_TYPE_TWO = 0x002;
+    public static final int CHECK_TYPE_THREE = 0x003;
 
     public static final int SPACING_AUTO = -65536;
 
@@ -160,6 +162,24 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
      */
     private ColorStateList buttonCheckBoradColor;
 
+
+    private ColorStateList buttonThreeBackGroundColor;
+    private ColorStateList buttonThreeBoradColor;
+    private int buttonThreeTextColor;
+
+
+    public void setTypeThreeBack(int buttonThreeBackGroundColor) {
+        this.buttonThreeBackGroundColor = ColorStateList.valueOf(buttonThreeBackGroundColor);
+    }
+
+    public void setTypeThreeBorad(int buttonThreeBoradColor) {
+        this.buttonThreeBoradColor = ColorStateList.valueOf(buttonThreeBoradColor);
+    }
+
+    public void setButtonThreeTextColor(int buttonThreeTextColor) {
+        this.buttonThreeTextColor = buttonThreeTextColor;
+    }
+
     /**
      * 子view是否允许多选
      * 默认单选
@@ -182,6 +202,14 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private List<Integer> listAllCheckedIndex;
     private List<Object> listAllCheckData;
 
+    /**
+     * 是否三级选择
+     */
+    private boolean isSecond;
+
+    public void setSecond(boolean second) {
+        isSecond = second;
+    }
 
     public void setWeight(boolean weight) {
         isWeight = weight;
@@ -261,6 +289,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         super(context, attrs);
         listAllCheckedIndex = new ArrayList<>();
         listAllCheckData = new ArrayList<>();
+
         this.dataListener = this;
         this.mContext = context;
         this.attributeSet = attrs;
@@ -329,6 +358,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         }
     }
 
+
     /**
      * 设置数据源
      *
@@ -391,40 +421,63 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         } else {
             qmuiRoundButtonDrawable.setIsRadiusAdjustBounds(false);
         }
-        qmuiRoundButton.setTag(false);
+        qmuiRoundButton.setTag(CHECK_TYPE_ONE);
         qmuiRoundButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isChecked = (boolean) qmuiRoundButton.getTag();
-                qmuiRoundButton.setTag(!isChecked);
-                if (onChooseItemClick != null) {
-                    onChooseItemClick.onItemDataListener(position, view, !isChecked);
-                }
+                int type = (int) qmuiRoundButton.getTag();
+                QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) qmuiRoundButton.getBackground();
                 if (!isAllMultiSelect) {
                     if (lastQmuiRoundButton != null && lastQmuiRoundButton != qmuiRoundButton) {
                         listAllCheckData.clear();
                         listAllCheckedIndex.clear();
                         QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
                         setbuttonFalse(lastQmuiRoundButton, lastDrawable);
-                        lastQmuiRoundButton.setTag(false);
+                        lastQmuiRoundButton.setTag(CHECK_TYPE_ONE);
                         lastQmuiRoundButton.setBackground(lastDrawable);
                     }
                 }
-                QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) qmuiRoundButton.getBackground();
-                if (!isChecked) {
-                    //选中状态  TODO  增加文字颜色
-                    listAllCheckData.add(data);
-                    listAllCheckedIndex.add(position);
-                    setButtonTrue(drawable, qmuiRoundButton);
-                    lastQmuiRoundButton = qmuiRoundButton;
-                } else {
-                    //未选中状态 TODO  增加文字颜色
-                    setbuttonFalse(qmuiRoundButton, drawable);
-                    listAllCheckData.remove(data);
-                    Integer integer = new Integer(position);
 
-                    boolean boo = listAllCheckedIndex.remove(integer);
+                switch (type) {
+                    case CHECK_TYPE_ONE:
+
+                        qmuiRoundButton.setTag(CHECK_TYPE_TWO);
+                        listAllCheckData.add(data);
+                        listAllCheckedIndex.add(position);
+                        setButtonTrue(drawable, qmuiRoundButton);
+                        lastQmuiRoundButton = qmuiRoundButton;
+                        break;
+                    case CHECK_TYPE_TWO:
+                        if(isSecond){
+                            qmuiRoundButton.setTag(CHECK_TYPE_ONE);
+                            setbuttonFalse(qmuiRoundButton, drawable);
+                            listAllCheckData.remove(data);
+                            Integer integer = new Integer(position);
+
+                            boolean boo = listAllCheckedIndex.remove(integer);
+                            lastQmuiRoundButton = null;
+                        }else{
+                            qmuiRoundButton.setTag(CHECK_TYPE_THREE);
+                            setButtonThree(drawable, qmuiRoundButton);
+                        }
+
+                        break;
+                    case CHECK_TYPE_THREE:
+                        qmuiRoundButton.setTag(CHECK_TYPE_ONE);
+                        setbuttonFalse(qmuiRoundButton, drawable);
+                        listAllCheckData.remove(data);
+                        Integer integer = new Integer(position);
+
+                        boolean boo = listAllCheckedIndex.remove(integer);
+                        lastQmuiRoundButton = null;
+                        break;
+                    default:
                 }
+                if (onChooseItemClick != null) {
+                    onChooseItemClick.onItemDataListener(position, view, (Integer) qmuiRoundButton.getTag());
+                }
+
+
                 qmuiRoundButton.setBackground(drawable);
             }
         });
@@ -438,6 +491,12 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         drawable.setBgData(buttonCheckBackGgroundColor);
         qmuiRoundButton.setTextColor(buttonCheckTextColor);
         drawable.setStrokeData(buttonBorderWidth, buttonCheckBoradColor);
+    }
+
+    private void setButtonThree(QMUIRoundButtonDrawable drawable, QMUIRoundButton qmuiRoundButton) {
+        drawable.setBgData(buttonThreeBackGroundColor);
+        qmuiRoundButton.setTextColor(buttonThreeTextColor);
+        drawable.setStrokeData(buttonBorderWidth, buttonThreeBoradColor);
     }
 
     /**
@@ -510,20 +569,20 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
      *
      * @param position 默认选中的item的索引
      */
-    public void setDefaultItemCheck(int position) {
+    public void setDefaultItemCheck(int position,int type) {
         if (position >= getChildCount()) {
             return;
         }
         final QMUIRoundButton childAt = (QMUIRoundButton) getChildAt(position);
         QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) childAt.getBackground();
         setButtonTrue(drawable, childAt);
-        childAt.setTag(true);
+        childAt.setTag(type);
         childAt.setBackground(drawable);
         if (!isAllMultiSelect) {
             if (lastQmuiRoundButton != null) {
                 QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
                 setbuttonFalse(lastQmuiRoundButton, lastDrawable);
-                lastQmuiRoundButton.setTag(false);
+                lastQmuiRoundButton.setTag(CHECK_TYPE_ONE);
                 lastQmuiRoundButton.setBackground(lastDrawable);
             }
             lastQmuiRoundButton = childAt;
