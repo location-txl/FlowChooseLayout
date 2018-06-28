@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -927,6 +928,14 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     @Override
     public String setData(String string) {
         return string;
+    }
+
+
+    class DataObserver extends DataSetObserver{
+        @Override
+        public void onChanged() {
+            super.onChanged();
+        }
     }
 }
 
