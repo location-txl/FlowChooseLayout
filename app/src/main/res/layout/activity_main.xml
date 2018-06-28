@@ -10,18 +10,10 @@
         android:id="@+id/id_attr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backgroundColor="@color/colorAccent"
-        app:borderColor="@color/colorPrimary"
-        app:borderWidth="1dp"
-        app:checked_back_border_color="@color/colorAccent"
-        app:checked_back_ground="@color/colorPrimary"
-        app:checked_text_color="#000000"
         app:flow="true"
-        app:radius="10dp"
-        app:text_color="#ffffff"
         app:weight="true"
         app:isMultiSelect="false"
-        app:weightNum="3">
+        app:weightNum="4">
 
     </com.loction.choose.flowchooselibrary.weight.FlowChooseLayout>
 

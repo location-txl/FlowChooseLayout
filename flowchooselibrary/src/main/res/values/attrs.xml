@@ -67,32 +67,6 @@
         <attr name="weight" format="boolean" />
         <!--均分数目   weight为false时无效-->
         <attr name="weightNum" format="integer" />
-        <!--选中时的文字颜色-->
-        <attr name="checked_text_color" />
-        <!--选中时的背景色-->
-        <attr name="checked_back_ground" />
-        <!--选中时的边框颜色-->
-        <attr name="checked_back_border_color" />
-        <!--默认的背景色-->
-        <attr name="backgroundColor" />
-        <!--默认的字体颜色-->
-        <attr name="text_color" />
-        <!--默认的边框颜色-->
-        <attr name="borderColor" />
-        <!--边框宽度-->
-        <attr name="borderWidth" />
-        <!--圆角是否自适应，为高度的一半-->
-        <attr name="isRadiusAdjustBounds" />
-        <!--指定四个圆角的大小-->
-        <attr name="radius" />
-        <!--指定左上方圆角的大小-->
-        <attr name="radiusTopLeft" />
-        <!--指定右上方圆角的大小-->
-        <attr name="radiusTopRight" />
-        <!--指定左下方圆角的大小-->
-        <attr name="radiusBottomLeft" />
-        <!--指定右下方圆角大小-->
-        <attr name="radiusBottomRight" />
         <!--设定是否多选 默认为单选-->
         <attr name="isMultiSelect" />
     </declare-styleable>

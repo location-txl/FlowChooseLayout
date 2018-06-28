@@ -1,27 +1,23 @@
 package com.loction.choose.flowchooselibrary.weight;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
-import android.graphics.Color;
+import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.loction.choose.flowchooselibrary.R;
-import com.loction.choose.flowchooselibrary.listener.CustomDataListener;
-import com.loction.choose.flowchooselibrary.listener.DataListener;
 import com.loction.choose.flowchooselibrary.listener.OnChooseItemClick;
-import com.loction.choose.flowchooselibrary.util.DimmenUtils;
+import com.loction.choose.flowchooselibrary.util.LogUtils;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 /**
  * 项目名称: 新医疗(HD)
@@ -32,15 +28,18 @@ import java.util.TreeSet;
  * 修改内容:
  * 修改时间:
  */
-public class FlowChooseLayout extends ViewGroup implements DataListener {
-    private static final String LOG_TAG = FlowChooseLayout.class.getSimpleName();
+public class FlowChooseLayout extends ViewGroup {
+    private DataObserver dataObserver;
 
+    private FlowAdapter adapter;
     /**
      * 三种状态
      */
-    public static final int CHECK_TYPE_ONE = 0x001;
-    public static final int CHECK_TYPE_TWO = 0x002;
-    public static final int CHECK_TYPE_THREE = 0x003;
+    public static final int CHECK_TYPE_NONE = 0x001;
+    public static final int CHECK_TYPE_START = 0x002;
+    public static final int CHECK_TYPE_CENTER = 0x003;
+    public static final int CHECK_TYPE_END = 0x004;
+
 
     public static final int SPACING_AUTO = -65536;
 
@@ -69,6 +68,73 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private boolean isWeight;
 
 
+    public void setAdapter(FlowAdapter flowAdapter) {
+        if (dataObserver == null) {
+            dataObserver = new DataObserver();
+        }
+        if (adapter != null) {
+            adapter.unregistObserver(dataObserver);
+        }
+        adapter = flowAdapter;
+        adapter.registObserver(dataObserver);
+        initView();
+    }
+
+    private void initView() {
+        final int itemCount = adapter.getItemCount();
+        for (int i = 0; i < itemCount; i++) {
+            final View itemview = adapter.getView(this, i);
+            itemview.setTag(CHECK_TYPE_NONE);
+            final int finalI = i;
+            itemview.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (itemview.getTag() == null || !(itemview.getTag() instanceof Integer)) {
+                        throw new RuntimeException("flowLayout error tag==null \n you may send " +
+                                "email to tttx0307@163.com");
+                    }
+                    int state = (int) itemview.getTag();
+                    int nextState = -1;
+                    switch (state) {
+                        case CHECK_TYPE_END:
+                            nextState = CHECK_TYPE_START;
+                            listAllCheckedIndex.remove(new Integer(finalI));
+                            break;
+                        case CHECK_TYPE_NONE:
+                        case CHECK_TYPE_START:
+                            nextState = CHECK_TYPE_CENTER;
+                            listAllCheckedIndex.add(finalI);
+                            break;
+                        case CHECK_TYPE_CENTER:
+                            nextState = CHECK_TYPE_END;
+                            break;
+                        default:
+                            throw new RuntimeException("flowLayout error of matching type  \n" +
+                                    " you may send " +
+                                    "email to tttx0307@163.com");
+                    }
+                    itemview.setTag(nextState);
+                    if (adapter != null) {
+                        adapter.onChangeState(itemview, finalI, nextState);
+                    }
+                    if (onChooseItemClick != null) {
+                        onChooseItemClick.onItemDataListener(finalI, itemview, state);
+                    }
+                }
+            });
+            addView(itemview);
+        }
+    }
+
+
+    @Override
+    public void addView(View child) {
+        if (child.getTag() == null) {
+            throw new RuntimeException("not add view you  may setAdapter bindView");
+        }
+        super.addView(child);
+    }
+
     /**
      * @see #isWeight  为ture时才生效
      * 一行显示几个
@@ -86,100 +152,6 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
 
     private Context mContext;
 
-    /**
-     * 子控件需要的属性集
-     */
-    private AttributeSet attributeSet;
-
-    /**
-     * 数据源设置方式
-     */
-    private DataListener dataListener;
-
-
-    /**
-     * 边框宽度
-     */
-    private int buttonBorderWidth;
-    /**
-     * 子view默认的背景色
-     */
-    private ColorStateList buttonBackGroundColor;
-    /**
-     * 子view默认的文字颜色
-     */
-    private int buttonTextColor;
-
-    /**
-     * 子view默认的描边颜色
-     */
-    private ColorStateList buttonBorderColor;
-    /**
-     * 子view的圆角高度是否为自适应为高度的一半
-     * 设置此属性为true后
-     *
-     * @see #buttonRadio
-     * 则上述属性无作用
-     */
-    private boolean buttonIsRadiusAdjustBounds;
-
-    /**
-     * 子view的四个圆角大小
-     *
-     * @see #buttonIsRadiusAdjustBounds  设置此属性为true后  此属性无作用
-     */
-    private int buttonRadio;
-
-    /**
-     * 子view的左上圆角大小
-     */
-    private int buttonTopLeftRadio;
-
-    /**
-     * 子view的右上圆角大小
-     */
-    private int buttonTopRightRadio;
-
-    /**
-     * 子view的左下方圆角大小
-     */
-    private int buttonBottomLeftRadio;
-    /**
-     * 子view的右下方圆角大小
-     */
-    private int buttonBottomRightRadio;
-
-
-    /**
-     * 子view选中的情况下文字颜色
-     */
-    private int buttonCheckTextColor;
-    /**
-     * 子view选中的情况下背景颜色
-     */
-    private ColorStateList buttonCheckBackGgroundColor;
-    /**
-     * 子view选中的情况下描边颜色
-     */
-    private ColorStateList buttonCheckBoradColor;
-
-
-    private ColorStateList buttonThreeBackGroundColor;
-    private ColorStateList buttonThreeBoradColor;
-    private int buttonThreeTextColor;
-
-
-    public void setTypeThreeBack(int buttonThreeBackGroundColor) {
-        this.buttonThreeBackGroundColor = ColorStateList.valueOf(buttonThreeBackGroundColor);
-    }
-
-    public void setTypeThreeBorad(int buttonThreeBoradColor) {
-        this.buttonThreeBoradColor = ColorStateList.valueOf(buttonThreeBoradColor);
-    }
-
-    public void setButtonThreeTextColor(int buttonThreeTextColor) {
-        this.buttonThreeTextColor = buttonThreeTextColor;
-    }
 
     /**
      * 子view是否允许多选
@@ -194,14 +166,7 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private OnChooseItemClick onChooseItemClick;
 
 
-    /**
-     * 获取最后一个选择的控件  单选时有效
-     */
-    private QMUIRoundButton lastQmuiRoundButton;
-
-
     private List<Integer> listAllCheckedIndex;
-    private List<Object> listAllCheckData;
 
     /**
      * 是否三级选择
@@ -220,58 +185,6 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         this.weightNum = weightNum;
     }
 
-    public void setButtonBorderWidth(int buttonBorderWidth) {
-        this.buttonBorderWidth = buttonBorderWidth;
-    }
-
-    public void setButtonBackGroundColor(ColorStateList buttonBackGroundColor) {
-        this.buttonBackGroundColor = buttonBackGroundColor;
-    }
-
-    public void setButtonTextColor(int buttonTextColor) {
-
-        this.buttonTextColor = buttonTextColor;
-    }
-
-    public void setButtonBorderColor(ColorStateList buttonBorderColor) {
-        this.buttonBorderColor = buttonBorderColor;
-    }
-
-    public void setButtonIsRadiusAdjustBounds(boolean buttonIsRadiusAdjustBounds) {
-        this.buttonIsRadiusAdjustBounds = buttonIsRadiusAdjustBounds;
-    }
-
-    public void setButtonRadio(int buttonRadio) {
-        this.buttonRadio = buttonRadio;
-    }
-
-    public void setButtonTopLeftRadio(int buttonTopLeftRadio) {
-        this.buttonTopLeftRadio = buttonTopLeftRadio;
-    }
-
-    public void setButtonTopRightRadio(int buttonTopRightRadio) {
-        this.buttonTopRightRadio = buttonTopRightRadio;
-    }
-
-    public void setButtonBottomLeftRadio(int buttonBottomLeftRadio) {
-        this.buttonBottomLeftRadio = buttonBottomLeftRadio;
-    }
-
-    public void setButtonBottomRightRadio(int buttonBottomRightRadio) {
-        this.buttonBottomRightRadio = buttonBottomRightRadio;
-    }
-
-    public void setButtonCheckTextColor(int buttonCheckTextColor) {
-        this.buttonCheckTextColor = buttonCheckTextColor;
-    }
-
-    public void setButtonCheckBackGgroundColor(ColorStateList buttonCheckBackGgroundColor) {
-        this.buttonCheckBackGgroundColor = buttonCheckBackGgroundColor;
-    }
-
-    public void setButtonCheckBoradColor(ColorStateList buttonCheckBoradColor) {
-        this.buttonCheckBoradColor = buttonCheckBoradColor;
-    }
 
     public void setAllMultiSelect(boolean allMultiSelect) {
         isAllMultiSelect = allMultiSelect;
@@ -289,11 +202,8 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
 
         super(context, attrs);
         listAllCheckedIndex = new ArrayList<>();
-        listAllCheckData = new ArrayList<>();
 
-        this.dataListener = this;
         this.mContext = context;
-        this.attributeSet = attrs;
         isNoMea = true;
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs, R.styleable.FlowChooseLayout, 0, 0);
@@ -329,28 +239,6 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             //居左还是居右
 
             mRtl = a.getBoolean(R.styleable.FlowChooseLayout_rtl, DEFAULT_RTL);
-            //获取默认背景色
-            buttonBackGroundColor = a.getColorStateList(R.styleable.FlowChooseLayout_backgroundColor);
-            //获取默认的文字颜色
-            buttonTextColor = a.getColor(R.styleable.FlowChooseLayout_text_color, Color.parseColor("#000000"));
-            //获取默认的边框颜色
-            buttonBorderColor = a.getColorStateList(R.styleable.FlowChooseLayout_borderColor);
-            //获取边框宽度
-            buttonBorderWidth = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_borderWidth, 0);
-            //获取圆角自适应
-            buttonIsRadiusAdjustBounds = a.getBoolean(R.styleable.FlowChooseLayout_isRadiusAdjustBounds, false);
-            //获取4个圆角大小
-            buttonRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radius, 0);
-            buttonTopLeftRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusTopLeft, 0);
-            buttonTopRightRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusTopRight, 0);
-            buttonBottomLeftRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusBottomLeft, 0);
-            buttonBottomRightRadio = a.getDimensionPixelSize(R.styleable.FlowChooseLayout_radiusBottomRight, 0);
-            //获取view选中的情况下的文字颜色
-            buttonCheckTextColor = a.getColor(R.styleable.FlowChooseLayout_checked_text_color, Color.parseColor("#000000"));
-            //获取view选中的情况下的背景色
-            buttonCheckBackGgroundColor = a.getColorStateList(R.styleable.FlowChooseLayout_checked_back_ground);
-            //获取view选中的情况下的边框颜色
-            buttonCheckBoradColor = a.getColorStateList(R.styleable.FlowChooseLayout_checked_back_border_color);
             //设定是否多选
             isAllMultiSelect = a.getBoolean(R.styleable.FlowChooseLayout_isMultiSelect, false);
 
@@ -361,146 +249,6 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
 
 
     /**
-     * 设置数据源
-     *
-     * @param list
-     */
-    public void setList(List<String> list) {
-        for (int i = 0; i < list.size(); i++) {
-            QMUIRoundButton qmuiRoundButton = getQmuiButton(dataListener.setData(list.get(i)), i, list.get(i));
-            addView(qmuiRoundButton);
-        }
-    }
-
-    public <T> void setList(List<T> list, CustomDataListener<T> customDataListener) {
-
-        for (int i = 0; i < list.size(); i++) {
-            QMUIRoundButton qmuiRoundButton = getQmuiButton(customDataListener.setListItemData(list.get(i)), i, list.get(i));
-            addView(qmuiRoundButton);
-        }
-    }
-
-
-    /**
-     * 内部设置content参数
-     *
-     * @param content
-     * @return
-     */
-    private QMUIRoundButton getQmuiButton(String content, final int position, final Object data) {
-        final QMUIRoundButton qmuiRoundButton = new QMUIRoundButton(mContext);
-        qmuiRoundButton.setText(content);
-//        qmuiRoundButton.setPadding(20,20,20,20);
-        qmuiRoundButton.setTextColor(buttonTextColor);
-        int left2Riht = DimmenUtils.dp2px(mContext, 30);
-        int pading = DimmenUtils.dp2px(mContext, 10);
-        qmuiRoundButton.setPadding(left2Riht, pading, left2Riht, pading);
-        QMUIRoundButtonDrawable qmuiRoundButtonDrawable = new QMUIRoundButtonDrawable();
-        //设置背景色
-        qmuiRoundButtonDrawable.setBgData(buttonBackGroundColor);
-        qmuiRoundButtonDrawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
-        /**
-         * 设置圆角
-         */
-        if (buttonIsRadiusAdjustBounds) {
-            qmuiRoundButtonDrawable.setIsRadiusAdjustBounds(buttonIsRadiusAdjustBounds);
-        } else if (buttonRadio != 0) {
-            qmuiRoundButtonDrawable.setCornerRadius(buttonRadio);
-            qmuiRoundButtonDrawable.setIsRadiusAdjustBounds(false);
-        } else if (buttonBottomLeftRadio > 0
-                || buttonBottomRightRadio > 0
-                || buttonTopRightRadio > 0
-                || buttonTopLeftRadio > 0) {
-            float[] radios = new float[]{
-                    buttonTopLeftRadio, buttonTopLeftRadio,
-                    buttonTopRightRadio, buttonTopRightRadio,
-                    buttonBottomRightRadio, buttonBottomRightRadio,
-                    buttonBottomLeftRadio, buttonBottomLeftRadio
-            };
-            qmuiRoundButtonDrawable.setCornerRadii(radios);
-            qmuiRoundButtonDrawable.setIsRadiusAdjustBounds(false);
-        } else {
-            qmuiRoundButtonDrawable.setIsRadiusAdjustBounds(false);
-        }
-        qmuiRoundButton.setTag(CHECK_TYPE_ONE);
-        qmuiRoundButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int type = (int) qmuiRoundButton.getTag();
-                QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) qmuiRoundButton.getBackground();
-                if (!isAllMultiSelect) {
-                    if (lastQmuiRoundButton != null && lastQmuiRoundButton != qmuiRoundButton) {
-                        listAllCheckData.clear();
-                        listAllCheckedIndex.clear();
-                        QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
-                        setbuttonFalse(lastQmuiRoundButton, lastDrawable);
-                        lastQmuiRoundButton.setTag(CHECK_TYPE_ONE);
-                        lastQmuiRoundButton.setBackground(lastDrawable);
-                    }
-                }
-
-                switch (type) {
-                    case CHECK_TYPE_ONE:
-
-                        qmuiRoundButton.setTag(CHECK_TYPE_TWO);
-                        listAllCheckData.add(data);
-                        listAllCheckedIndex.add(position);
-                        setButtonTrue(drawable, qmuiRoundButton);
-                        lastQmuiRoundButton = qmuiRoundButton;
-                        break;
-                    case CHECK_TYPE_TWO:
-                        if(isSecond){
-                            qmuiRoundButton.setTag(CHECK_TYPE_ONE);
-                            setbuttonFalse(qmuiRoundButton, drawable);
-                            listAllCheckData.remove(data);
-                            Integer integer = new Integer(position);
-
-                            boolean boo = listAllCheckedIndex.remove(integer);
-                            lastQmuiRoundButton = null;
-                        }else{
-                            qmuiRoundButton.setTag(CHECK_TYPE_THREE);
-                            setButtonThree(drawable, qmuiRoundButton);
-                        }
-
-                        break;
-                    case CHECK_TYPE_THREE:
-                        qmuiRoundButton.setTag(CHECK_TYPE_ONE);
-                        setbuttonFalse(qmuiRoundButton, drawable);
-                        listAllCheckData.remove(data);
-                        Integer integer = new Integer(position);
-
-                        boolean boo = listAllCheckedIndex.remove(integer);
-                        lastQmuiRoundButton = null;
-                        break;
-                    default:
-                }
-                if (onChooseItemClick != null) {
-                    onChooseItemClick.onItemDataListener(position, view, (Integer) qmuiRoundButton.getTag());
-                }
-
-
-                qmuiRoundButton.setBackground(drawable);
-            }
-        });
-        qmuiRoundButton.setBackground(qmuiRoundButtonDrawable);
-        MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        qmuiRoundButton.setLayoutParams(params);
-        return qmuiRoundButton;
-    }
-
-    private void setButtonTrue(QMUIRoundButtonDrawable drawable, QMUIRoundButton qmuiRoundButton) {
-        drawable.setBgData(buttonCheckBackGgroundColor);
-        qmuiRoundButton.setTextColor(buttonCheckTextColor);
-        drawable.setStrokeData(buttonBorderWidth, buttonCheckBoradColor);
-    }
-
-    private void setButtonThree(QMUIRoundButtonDrawable drawable, QMUIRoundButton qmuiRoundButton) {
-        drawable.setBgData(buttonThreeBackGroundColor);
-        qmuiRoundButton.setTextColor(buttonThreeTextColor);
-        drawable.setStrokeData(buttonBorderWidth, buttonThreeBoradColor);
-    }
-
-    /**
      * 获取所有选中的下标集合
      *
      * @return
@@ -509,86 +257,6 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         return listAllCheckedIndex;
     }
 
-    /**
-     * 获取所有选中的数据源集合
-     *
-     * @param tClass 泛型标志
-     * @param <T>
-     * @return 数据源集合
-     */
-    public <T> List<T> getAllCheckData(Class<T> tClass) {
-
-        List<T> list = new ArrayList<>();
-        for (Object o : listAllCheckData) {
-            T t = null;
-
-            t = (T) o;
-            list.add(t);
-        }
-        return list;
-    }
-
-    /**
-     * 返回默认泛型为String的集合
-     *
-     * @return
-     */
-    public List<String> getAllCheckData() {
-        List<String> list = new ArrayList<>();
-        for (Object o : listAllCheckData) {
-
-            list.add((String) o);
-        }
-        return list;
-    }
-
-    /**
-     * 清除所有item的选中效果
-     */
-    public void clearAllItemChecked() {
-        listAllCheckedIndex.clear();
-        listAllCheckData.clear();
-        lastQmuiRoundButton = null;
-        final int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-//测试
-            final QMUIRoundButton button = (QMUIRoundButton) getChildAt(i);
-            button.setTag(false);
-            QMUIRoundButtonDrawable qmuiRoundButtonDrawable = (QMUIRoundButtonDrawable) button.getBackground();
-            setbuttonFalse(button, qmuiRoundButtonDrawable);
-        }
-    }
-
-    private void setbuttonFalse(QMUIRoundButton button, QMUIRoundButtonDrawable qmuiRoundButtonDrawable) {
-        button.setTextColor(buttonTextColor);
-        qmuiRoundButtonDrawable.setBgData(buttonBackGroundColor);
-        qmuiRoundButtonDrawable.setStrokeData(buttonBorderWidth, buttonBorderColor);
-    }
-
-    /**
-     * 设置单个item默认选中123
-     *
-     * @param position 默认选中的item的索引
-     */
-    public void setDefaultItemCheck(int position,int type) {
-        if (position >= getChildCount()) {
-            return;
-        }
-        final QMUIRoundButton childAt = (QMUIRoundButton) getChildAt(position);
-        QMUIRoundButtonDrawable drawable = (QMUIRoundButtonDrawable) childAt.getBackground();
-        setButtonTrue(drawable, childAt);
-        childAt.setTag(type);
-        childAt.setBackground(drawable);
-        if (!isAllMultiSelect) {
-            if (lastQmuiRoundButton != null) {
-                QMUIRoundButtonDrawable lastDrawable = (QMUIRoundButtonDrawable) lastQmuiRoundButton.getBackground();
-                setbuttonFalse(lastQmuiRoundButton, lastDrawable);
-                lastQmuiRoundButton.setTag(CHECK_TYPE_ONE);
-                lastQmuiRoundButton.setBackground(lastDrawable);
-            }
-            lastQmuiRoundButton = childAt;
-        }
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -603,9 +271,15 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
         mHeightForRow.clear();
 
         int measuredHeight = 0, measuredWidth = 0, childCount = getChildCount();
+        LogUtils.d("childcount===>" + childCount);
+        LogUtils.d("weightCount===>" + weightNum);
+        //行宽  最大行高度 每行个数
         int rowWidth = 0, maxChildHeightInRow = 0, childNumInRow = 0;
+        //总行宽
         int rowSize = widthSize - getPaddingLeft() - getPaddingRight();
+        //是否流体
         boolean allowFlow = widthMode != MeasureSpec.UNSPECIFIED && mFlow;
+        //ziview间距  后面重新计算
         int childSpacing = mChildSpacing == SPACING_AUTO && widthMode == MeasureSpec.UNSPECIFIED
                 ? 0 : mChildSpacing;
         //获取到测量的宽度
@@ -640,8 +314,8 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                 Log.e("TAG", "换行==" + i);
                 if (isWeight) {
                     mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
-                    Log.e("TR", mHorizontalSpacingForRow.toString());
-                    Log.e("TR", mChildWeightSpacing.get(mHorizontalSpacingForRow.size()) + "dsa");
+//                    Log.e("TR", mHorizontalSpacingForRow.toString());
+//                    Log.e("TR", mChildWeightSpacing.get(mHorizontalSpacingForRow.size()) + "dsa");
                 } else {
                     mHorizontalSpacingForRow.add(
                             getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
@@ -739,36 +413,10 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
     private int getChildSpacing(int widthMeasureSpec, int heightMeasureSpec, int measuredHeight, int childSpacing, int windowWidth, int mode, int startIndex) {
         if (isWeight && weightNum > 0 && isNoMea) {
             isNoMea = false;
-
             if (mode == MeasureSpec.EXACTLY) {
-
-                final int i = setChildRow(startIndex, (startIndex + 3) < getChildCount() ? startIndex + 3 : getChildCount(), widthMeasureSpec, heightMeasureSpec, measuredHeight, windowWidth);
-
-
-//                int allViewWidth = 0;
-//                Log.e("mn", "个数===" + getChildCount());
-//                for (int j = startIndex; j < weightNum + startIndex; j++) {
-//                    Log.e("Test", "spec==" + j);
-//
-//                    View ch = getChildAt(j);
-//                    if (ch == null) {
-//                        return childSpacing;
-//                    }
-//                    if (ch.getVisibility() == GONE) {
-//                        continue;
-//                    }
-//                    final LayoutParams layoutParams = ch.getLayoutParams();
-//                    if (layoutParams instanceof MarginLayoutParams) {
-//                        measureChildWithMargins(ch, widthMeasureSpec, 0, heightMeasureSpec, measuredHeight);
-//                        MarginLayoutParams params = (MarginLayoutParams) layoutParams;
-//                        allViewWidth = allViewWidth + ch.getMeasuredWidth() + params.leftMargin + params.rightMargin;
-////                   allViewWidth = params.\
-//                    }
-//                }
-//                childSpacing = (windowWidth - allViewWidth) / (weightNum - 1);
-//                mChildSpacing = childSpacing;
-//                Log.e("Test", "spec==" + childSpacing);
-
+                final int i = setChildRow(startIndex, (startIndex + weightNum) < getChildCount() ?
+                                startIndex + weightNum : getChildCount(), widthMeasureSpec,
+                        heightMeasureSpec, measuredHeight, windowWidth);
             }
         }
         return childSpacing;
@@ -795,9 +443,12 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
             }
         }
         childSpacing = (windowWidth - allViewWidth) / (weightNum - 1);
+        LogUtils.d("weigh   childSpacing===>" + childSpacing);
         mChildWeightSpacing.add(childSpacing);
         if (endIndex < getChildCount()) {
-            setChildRow(endIndex, (endIndex + 3) < getChildCount() ? endIndex + 3 : getChildCount(), widthMeasureSpec, heightMeasureSpec, measuredHeight, windowWidth);
+            setChildRow(endIndex, (endIndex + weightNum) < getChildCount() ? endIndex + weightNum :
+                    getChildCount
+                            (), widthMeasureSpec, heightMeasureSpec, measuredHeight, windowWidth);
         }
 //        mChildSpacing = childSpacing;
         Log.e("Test", "spec==" + childSpacing);
@@ -925,17 +576,23 @@ public class FlowChooseLayout extends ViewGroup implements DataListener {
                 TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
-    @Override
-    public String setData(String string) {
-        return string;
-    }
 
-
-    class DataObserver extends DataSetObserver{
+    class DataObserver extends DataSetObserver {
         @Override
         public void onChanged() {
             super.onChanged();
+            //刷新数据
+            removeAllViews();
+            listAllCheckedIndex.clear();
+            initView();
         }
     }
+
+
+    @IntDef({CHECK_TYPE_NONE, CHECK_TYPE_START, CHECK_TYPE_CENTER, CHECK_TYPE_END})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface FlowState {
+    }
+
 }
 
