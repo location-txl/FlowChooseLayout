@@ -29,4 +29,9 @@ public abstract class FlowAdapter<T extends View> implements IApdater<T> {
     public void notifyDataSetChanged() {
          obseroble.notifyChanged();
     }
+
+    @Override
+    public void onChangeState(T view, int position, int state) {
+
+    }
 }

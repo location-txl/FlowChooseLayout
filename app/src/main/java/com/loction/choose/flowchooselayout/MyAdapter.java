@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.loction.choose.flowchooselibrary.util.LogUtils;
 import com.loction.choose.flowchooselibrary.weight.FlowAdapter;
 import com.loction.choose.flowchooselibrary.weight.FlowChooseLayout;
 
@@ -21,39 +22,39 @@ import java.util.List;
 
 
 public class MyAdapter extends FlowAdapter<TextView> {
-    private List<String> list;
+	private List<String> list;
 
-    public MyAdapter(List<String> list) {
-        this.list = list;
-    }
+	public MyAdapter(List<String> list) {
+		this.list = list;
+	}
 
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
+	@Override
+	public int getItemCount() {
+		return list.size();
+	}
 
-    @Override
-    public TextView getView(ViewGroup parent, int position) {
-        TextView textView = new TextView(parent.getContext());
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textView.setLayoutParams(params);
-        textView.setBackgroundColor(Color.RED);
-        textView.setText(list.get(position));
-        return textView;
-    }
+	@Override
+	public TextView getView(ViewGroup parent, int position) {
+		TextView textView = new TextView(parent.getContext());
+		textView.setBackgroundColor(Color.RED);
+		textView.setText(list.get(position));
+		return textView;
+	}
 
-    @Override
-    public void onChangeState(TextView view, int position, int state) {
-        switch (state) {
-            case FlowChooseLayout.CHECK_TYPE_START:
-                view.setText("开始");
-                break;
-            case FlowChooseLayout.CHECK_TYPE_CENTER:
-                view.setText("中间");
-                break;
-            case FlowChooseLayout.CHECK_TYPE_END:
-                view.setText("结束");
-                break;
-        }
-    }
+	@Override
+	public void onChangeState(TextView view, int position, int state) {
+		switch (state) {
+			case FlowChooseLayout.CHECK_TYPE_START:
+				view.setText("开始");
+				break;
+			case FlowChooseLayout.CHECK_TYPE_CENTER:
+				view.setText("中间");
+				break;
+			case FlowChooseLayout.CHECK_TYPE_END:
+				view.setText("结束");
+				break;
+			default:
+				LogUtils.d("未知类型");
+		}
+	}
 }
