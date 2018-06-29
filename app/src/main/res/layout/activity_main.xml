@@ -1,33 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.loction.choose.flowchooselayout.MainActivity">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="com.loction.choose.flowchooselayout.MainActivity">
 
-    <com.loction.choose.flowchooselibrary.weight.FlowChooseLayout
-        android:id="@+id/id_attr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:flow="true"
-        app:weight="true"
-        app:isMultiSelect="false"
-        app:weightNum="4">
+	<com.loction.choose.flowchooselibrary.weight.FlowChooseLayout
+		android:id="@+id/id_attr"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:adapter="false"
+		app:flow="true"
+		app:isMultiSelect="false"
+		app:weight="true"
+		app:weightNum="4">
 
-    </com.loction.choose.flowchooselibrary.weight.FlowChooseLayout>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="dsadsa" />
 
-    <Button
-        android:id="@+id/id_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="获取选中项" />
-    <Button
-        android:id="@+id/id_clear"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/id_btn"
-        android:text="清除选中项"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+		<TextView
+			android:layout_width="wrap_content"
+
+			android:layout_height="wrap_content"
+			android:text="dsadsa" />
+
+		<TextView
+			android:layout_width="wrap_content"
+
+			android:layout_height="wrap_content"
+			android:text="dsadsa" />
+	</com.loction.choose.flowchooselibrary.weight.FlowChooseLayout>
+
+	<Button
+		android:id="@+id/id_btn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:text="获取选中项" />
+
+	<Button
+		android:id="@+id/id_clear"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:layout_toRightOf="@id/id_btn"
+		android:text="清除选中项" />
 </RelativeLayout>

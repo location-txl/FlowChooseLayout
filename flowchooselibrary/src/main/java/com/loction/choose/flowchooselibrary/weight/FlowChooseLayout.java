@@ -99,7 +99,6 @@ public class FlowChooseLayout extends ViewGroup {
 		for (int i = 0; i < itemCount; i++) {
 			final View itemview = adapter.getView(this, i);
 			itemview.setTag(KEY_LOCK, key);
-			LogUtils.d("key===>" + key);
 			if (defaultState!=null&&defaultState.containsKey(i)) {
 				Integer state = defaultState.get(i);
 				itemview.setTag(state);
@@ -147,13 +146,12 @@ public class FlowChooseLayout extends ViewGroup {
 		}
 	}
 
-
 	@Override
-	public void addView(View child) {
+	public void addView(View child, int index, LayoutParams params) {
 		if (isAdapter && child.getTag(KEY_LOCK) == null) {
 			throw new RuntimeException("not add view you  may setAdapter bindView perhaps adapter false");
 		}
-		super.addView(child);
+		super.addView(child, index, params);
 	}
 
 	/**

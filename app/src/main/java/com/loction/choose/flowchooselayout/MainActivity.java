@@ -27,13 +27,13 @@ public class MainActivity extends AppCompatActivity {
         list.add("刘备");
         list.add("曹操");
         list.add("曹操");
-        myAdapter = new MyAdapter(list);
-        Map<Integer, Integer> de = new HashMap<>();
-        de.put(0,FlowChooseLayout.CHECK_TYPE_CENTER);
-        de.put(1,FlowChooseLayout.CHECK_TYPE_END);
-        flowChooseLayout.setAdapter(myAdapter);
-        flowChooseLayout.setDefaultCheckd(de);
-        myAdapter.notifyDataSetChanged();
+//        myAdapter = new MyAdapter(list);
+//        Map<Integer, Integer> de = new HashMap<>();
+//        de.put(0,FlowChooseLayout.CHECK_TYPE_CENTER);
+//        de.put(1,FlowChooseLayout.CHECK_TYPE_END);
+//        flowChooseLayout.setAdapter(myAdapter);
+//        flowChooseLayout.setDefaultCheckd(de);
+//        myAdapter.notifyDataSetChanged();
         findViewById(R.id.id_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
