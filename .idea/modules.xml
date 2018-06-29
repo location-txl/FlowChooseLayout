@@ -5,9 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/FlowChooseLayout.iml" filepath="$PROJECT_DIR$/FlowChooseLayout.iml" />
       <module fileurl="file://D:\test\FlowChooseLayout\.idea\FlowChooseLayout.iml" filepath="D:\test\FlowChooseLayout\.idea\FlowChooseLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\test\FlowChooseLayout\app\app.iml" filepath="D:\test\FlowChooseLayout\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/flowchooselibrary/flowchooselibrary.iml" filepath="$PROJECT_DIR$/flowchooselibrary/flowchooselibrary.iml" />
-      <module fileurl="file://D:\test\FlowChooseLayout\flowchooselibrary\flowchooselibrary.iml" filepath="D:\test\FlowChooseLayout\flowchooselibrary\flowchooselibrary.iml" />
     </modules>
   </component>
 </project>

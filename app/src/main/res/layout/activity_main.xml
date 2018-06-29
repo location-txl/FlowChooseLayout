@@ -10,28 +10,12 @@
 		android:id="@+id/id_attr"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		app:adapter="false"
 		app:flow="true"
 		app:isMultiSelect="false"
 		app:weight="true"
 		app:weightNum="4">
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="dsadsa" />
 
-		<TextView
-			android:layout_width="wrap_content"
-
-			android:layout_height="wrap_content"
-			android:text="dsadsa" />
-
-		<TextView
-			android:layout_width="wrap_content"
-
-			android:layout_height="wrap_content"
-			android:text="dsadsa" />
 	</com.loction.choose.flowchooselibrary.weight.FlowChooseLayout>
 
 	<Button

@@ -1,6 +1,7 @@
 package com.loction.choose.flowchooselayout;
 
 import android.graphics.Color;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -21,37 +22,34 @@ import java.util.List;
  */
 
 
-public class MyAdapter extends FlowAdapter<TextView> {
-	private List<String> list;
+public class MyAdapter extends FlowAdapter<DataBean> {
 
-	public MyAdapter(List<String> list) {
-		this.list = list;
+
+	public MyAdapter(List<DataBean> data) {
+		super(data);
 	}
 
 	@Override
-	public int getItemCount() {
-		return list.size();
-	}
-
-	@Override
-	public TextView getView(ViewGroup parent, int position) {
+	public View getView(ViewGroup parent, View view, int position) {
 		TextView textView = new TextView(parent.getContext());
 		textView.setBackgroundColor(Color.RED);
-		textView.setText(list.get(position));
+		textView.setText(data.get(position).getName());
 		return textView;
 	}
 
+
 	@Override
-	public void onChangeState(TextView view, int position, int state) {
+	public void onChangeState(View view, int position, int state) {
+		TextView textView = (TextView) view;
 		switch (state) {
 			case FlowChooseLayout.CHECK_TYPE_START:
-				view.setText("开始");
+				textView.setText("开始");
 				break;
 			case FlowChooseLayout.CHECK_TYPE_CENTER:
-				view.setText("中间");
+				textView.setText("中间");
 				break;
 			case FlowChooseLayout.CHECK_TYPE_END:
-				view.setText("结束");
+				textView.setText("结束");
 				break;
 			default:
 				LogUtils.d("未知类型");

@@ -10,23 +10,24 @@ import android.view.ViewGroup;
  * description：
  */
 
-public interface IApdater<T extends View> {
-    /**
-     * 返回view的总数量
-     *
-     * @return
-     */
-    int getItemCount();
+public interface IApdater {
+	/**
+	 * 返回view的总数量
+	 *
+	 * @return
+	 */
+	int getItemCount();
 
 
-    /**
-     * 返回一个View 用于View的构建
-     *
-     * @param parent   父控件
-     * @param position 当前的索引
-     * @return 返回view
-     */
-    T getView(ViewGroup parent, int position);
+	/**
+	 * 返回一个View 用于View的构建
+	 *
+	 * @param parent   父控件
+	 * @param view     如果做局部刷新时 此View不为null
+	 * @param position 当前的索引
+	 * @return 返回view
+	 */
+	View getView(ViewGroup parent, View view, int position);
 
 //
 //	/**
@@ -42,26 +43,49 @@ public interface IApdater<T extends View> {
 //	 */
 //	void unBindParent();
 
-    /**
-     * 注册观察者
-     *
-     * @param dataObserver
-     */
-    void registObserver(FlowChooseLayout.DataObserver dataObserver);
+	/**
+	 * 注册观察者
+	 *
+	 * @param dataObserver
+	 */
+	void registObserver(FlowChooseLayout.DataObserver dataObserver);
 
 
-    /**
-     * 解绑被观察者
-     *
-     * @param dataSetObserver
-     */
-    void unregistObserver(FlowChooseLayout.DataObserver dataSetObserver);
+	/**
+	 * 解绑被观察者
+	 *
+	 * @param dataSetObserver
+	 */
+	void unregistObserver(FlowChooseLayout.DataObserver dataSetObserver);
 
-    /**
-     * 数据更新时调用
-     */
-    void notifyDataSetChanged();
+	/**
+	 * 数据更新时调用
+	 */
+	void notifyDataSetChanged();
 
-    void onChangeState(T view, int position, @FlowChooseLayout.FlowState int state);
+
+	/**
+	 * 局部刷新
+	 *
+	 * @param position
+	 */
+	void notifyDataSetChanged(int position);
+
+	/**
+	 * 刷新从当前索引到后面的全部数据
+	 *
+	 * @param position
+	 */
+	void notifyDataInvied(int position);
+
+
+	/**
+	 * 状态改变时调用
+	 *
+	 * @param view
+	 * @param position
+	 * @param state
+	 */
+	void onChangeState(View view, int position, @FlowChooseLayout.FlowState int state);
 
 }

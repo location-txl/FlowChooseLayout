@@ -47,6 +47,8 @@ public class FlowChooseLayout extends ViewGroup {
 	public static final int CHECK_TYPE_CENTER = 0x003;
 	public static final int CHECK_TYPE_END = 0x004;
 
+	private View lastView;
+
 
 	public static final int SPACING_AUTO = -65536;
 
@@ -94,18 +96,29 @@ public class FlowChooseLayout extends ViewGroup {
 		initView();
 	}
 
+	/**
+	 * 初始化view
+	 */
 	private void initView() {
 		final int itemCount = adapter.getItemCount();
 		for (int i = 0; i < itemCount; i++) {
-			final View itemview = adapter.getView(this, i);
+			//通过适配器获取view
+			final View itemview = adapter.getView(this, null, i);
+			//设置验证锁
 			itemview.setTag(KEY_LOCK, key);
-			if (defaultState!=null&&defaultState.containsKey(i)) {
+			//获取默认状态
+			if (defaultState != null && defaultState.containsKey(i)) {
 				Integer state = defaultState.get(i);
 				itemview.setTag(state);
 				if (state != CHECK_TYPE_START) {
+					if (!isAllMultiSelect) {
+						lastView = itemview;
+					}
 					listAllCheckedIndex.add(i);
 				}
 				adapter.onChangeState(itemview, i, state);
+			} else {
+				itemview.setTag(CHECK_TYPE_START);
 			}
 			final int finalI = i;
 			itemview.setOnClickListener(new OnClickListener() {
@@ -114,6 +127,7 @@ public class FlowChooseLayout extends ViewGroup {
 					if (itemview.getTag() == null || !(itemview.getTag() instanceof Integer)) {
 						itemview.setTag(CHECK_TYPE_START);
 					}
+					if()
 					int state = (int) itemview.getTag();
 					int nextState = -1;
 					switch (state) {
@@ -616,6 +630,38 @@ public class FlowChooseLayout extends ViewGroup {
 			listAllCheckedIndex.clear();
 			initView();
 		}
+
+		/**
+		 * 刷新局部数据
+		 *
+		 * @param position
+		 */
+		public void onChangeed(int position) {
+			refreshview(position);
+		}
+
+		public void onChangeedInvid(int position) {
+			int childCount = getChildCount();
+			for (int index = position; index < childCount; index++) {
+				refreshview(index);
+			}
+		}
+	}
+
+	private void refreshview(int position) {
+		View childAt = getChildAt(position);
+		if (childAt == null) {
+			return;
+		}
+		if (adapter == null) {
+			return;
+		}
+		View view = adapter.getView(FlowChooseLayout.this, null, position);
+		view.setTag(KEY_LOCK, key);
+		view.setTag(childAt.getTag());
+		adapter.onChangeState(view, position, (Integer) view.getTag());
+		removeViewAt(position);
+		addView(view, position);
 	}
 
 
@@ -623,6 +669,7 @@ public class FlowChooseLayout extends ViewGroup {
 	@Retention(RetentionPolicy.SOURCE)
 	public @interface FlowState {
 	}
+
 
 }
 

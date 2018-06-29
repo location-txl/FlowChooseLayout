@@ -2,6 +2,8 @@ package com.loction.choose.flowchooselibrary.weight;
 
 import android.view.View;
 
+import java.util.List;
+
 /**
  * 项目名称: MvpRoute
  * 类描述:
@@ -13,25 +15,50 @@ import android.view.View;
  */
 
 
-public abstract class FlowAdapter<T extends View> implements IApdater<T> {
-    private FlowObseroble obseroble = new FlowObseroble();
-    @Override
-    public void registObserver(FlowChooseLayout.DataObserver dataObserver) {
-        obseroble.registerObserver(dataObserver);
-    }
+public abstract class FlowAdapter<T> implements IApdater {
 
-    @Override
-    public void unregistObserver(FlowChooseLayout.DataObserver dataSetObserver) {
-        obseroble.unregisterObserver(dataSetObserver);
-    }
+	protected List<T> data;
 
-    @Override
-    public void notifyDataSetChanged() {
-         obseroble.notifyChanged();
-    }
 
-    @Override
-    public void onChangeState(T view, int position, int state) {
+	private FlowObseroble obseroble = new FlowObseroble();
 
-    }
+
+	public FlowAdapter(List<T> data) {
+		this.data = data;
+	}
+
+	@Override
+	public void registObserver(FlowChooseLayout.DataObserver dataObserver) {
+		obseroble.registerObserver(dataObserver);
+	}
+
+	@Override
+	public void unregistObserver(FlowChooseLayout.DataObserver dataSetObserver) {
+		obseroble.unregisterObserver(dataSetObserver);
+	}
+
+	@Override
+	public int getItemCount() {
+		return data == null ? 0 : data.size();
+	}
+
+	@Override
+	public void notifyDataSetChanged() {
+		obseroble.notifyChanged();
+	}
+
+	@Override
+	public void notifyDataInvied(int position) {
+		obseroble.notifyChangedInvied(position);
+	}
+
+	@Override
+	public void notifyDataSetChanged(int position) {
+		obseroble.notifyChanged(position);
+	}
+
+	@Override
+	public void onChangeState(View view, int position, int state) {
+
+	}
 }

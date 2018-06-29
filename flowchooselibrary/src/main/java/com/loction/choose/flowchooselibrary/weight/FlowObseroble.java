@@ -19,5 +19,16 @@ public class FlowObseroble extends Observable<FlowChooseLayout.DataObserver> {
 			mObservers.get(i).onChanged();
 		}
 	}
+	public void notifyChanged(int position){
+		for (int i = mObservers.size() - 1; i >= 0; i--) {
+			mObservers.get(i).onChangeed(position);
+		}
+	}
+
+	public void notifyChangedInvied(int position){
+		for (int i = mObservers.size() - 1; i >= 0; i--) {
+			mObservers.get(i).onChangeedInvid(position);
+		}
+	}
 
 }
