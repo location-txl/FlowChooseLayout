@@ -11,7 +11,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		app:flow="true"
-		app:isMultiSelect="false"
+		app:isMultiSelect="true"
+		app:rowSpacing="10dp"
 		app:weight="true"
 		app:weightNum="4">
 
@@ -23,7 +24,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
-		android:text="获取选中项" />
+		android:text="增加选中项" />
 
 	<Button
 		android:id="@+id/id_clear"
@@ -31,5 +32,15 @@
 		android:layout_height="wrap_content"
 		android:layout_centerVertical="true"
 		android:layout_toRightOf="@id/id_btn"
-		android:text="清除选中项" />
+		android:text="获取选中项" />
+
+	<TextView
+		android:id="@+id/id_content"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/id_clear"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="20dp"
+		android:text=""
+		android:textSize="16sp" />
 </RelativeLayout>

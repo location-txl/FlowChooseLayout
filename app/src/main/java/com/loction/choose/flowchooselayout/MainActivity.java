@@ -3,6 +3,7 @@ package com.loction.choose.flowchooselayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.loction.choose.flowchooselibrary.util.LogUtils;
 import com.loction.choose.flowchooselibrary.weight.FlowChooseLayout;
@@ -16,11 +17,13 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
 	private MyAdapter myAdapter;
+	private TextView textView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		textView = findViewById(R.id.id_content);
 		final FlowChooseLayout flowChooseLayout = findViewById(R.id.id_attr);
 		final List<DataBean> list = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
@@ -38,12 +41,10 @@ public class MainActivity extends AppCompatActivity {
 		findViewById(R.id.id_btn).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Random random = new Random();
-				int i = random.nextInt(list.size());
-				DataBean dataBean = list.get(i);
-				dataBean.setName("哈哈哈");
-				myAdapter.notifyDataSetChanged(i);
-
+				DataBean dataBean = new DataBean();
+				dataBean.setName("增加选中项");
+				list.add(dataBean);
+				myAdapter.notifyDataSetChanged();
 			}
 		});
 
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
 				List<Integer> allCheckedIndex = flowChooseLayout.getAllCheckedIndex();
 				LogUtils.i("choose===>" + "选中===》" + allCheckedIndex.toString());
+				textView.setText("已经选中的索引\n");
+				textView.append(allCheckedIndex.toString());
 			}
 		});
 

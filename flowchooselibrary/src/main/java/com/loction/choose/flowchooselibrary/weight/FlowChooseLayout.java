@@ -72,7 +72,6 @@ public class FlowChooseLayout extends ViewGroup {
 	private float mAdjustedRowSpacing = DEFAULT_ROW_SPACING;
 	private boolean mRtl = DEFAULT_RTL;
 	private int mMaxRows = DEFAULT_MAX_ROWS;
-	private boolean isNoMea;
 	/**
 	 * 是否权重
 	 */
@@ -122,6 +121,7 @@ public class FlowChooseLayout extends ViewGroup {
 				adapter.onChangeState(itemview, i, state);
 			} else {
 				itemview.setTag(CHECK_TYPE_START);
+				adapter.onChangeState(itemview,i,CHECK_TYPE_START);
 			}
 			final int finalI = i;
 			itemview.setOnClickListener(new OnClickListener() {
@@ -144,6 +144,7 @@ public class FlowChooseLayout extends ViewGroup {
 							if (!isAllMultiSelect && lastView != null && lastView != itemview) {
 								lastView.setTag(CHECK_TYPE_START);
 								adapter.onChangeState(lastView, lastPosition, CHECK_TYPE_START);
+								listAllCheckedIndex.remove(new Integer(lastPosition));
 							}
 							if (!isAllMultiSelect && itemview != lastView) {
 								lastView = itemview;
@@ -171,6 +172,7 @@ public class FlowChooseLayout extends ViewGroup {
 			});
 			addView(itemview);
 		}
+
 	}
 
 	@Override
@@ -250,7 +252,6 @@ public class FlowChooseLayout extends ViewGroup {
 		listAllCheckedIndex = new ArrayList<>();
 
 		this.mContext = context;
-		isNoMea = true;
 		TypedArray a = context.getTheme().obtainStyledAttributes(
 				attrs, R.styleable.FlowChooseLayout, 0, 0);
 		try {
@@ -362,8 +363,6 @@ public class FlowChooseLayout extends ViewGroup {
 				Log.e("TAG", "换行==" + i);
 				if (isWeight) {
 					mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
-//                    Log.e("TR", mHorizontalSpacingForRow.toString());
-//                    Log.e("TR", mChildWeightSpacing.get(mHorizontalSpacingForRow.size()) + "dsa");
 				} else {
 					mHorizontalSpacingForRow.add(
 							getSpacingForRow(childSpacing, rowSize, rowWidth, childNumInRow));
@@ -383,6 +382,7 @@ public class FlowChooseLayout extends ViewGroup {
 
 				childNumInRow++;
 				if (isWeight) {
+//					if()
 					Log.e("GHF", "width===" + mChildWeightSpacing.get(mHorizontalSpacingForRow.size()));
 					rowWidth += childWidth + mChildWeightSpacing.get(mHorizontalSpacingForRow.size());
 				} else {
@@ -459,8 +459,7 @@ public class FlowChooseLayout extends ViewGroup {
 	}
 
 	private int getChildSpacing(int widthMeasureSpec, int heightMeasureSpec, int measuredHeight, int childSpacing, int windowWidth, int mode, int startIndex) {
-		if (isWeight && weightNum > 0 && isNoMea) {
-			isNoMea = false;
+		if (isWeight && weightNum > 0 ) {
 			if (mode == MeasureSpec.EXACTLY) {
 				final int i = setChildRow(startIndex, (startIndex + weightNum) < getChildCount() ?
 								startIndex + weightNum : getChildCount(), widthMeasureSpec,
@@ -644,6 +643,10 @@ public class FlowChooseLayout extends ViewGroup {
 			super.onChanged();
 			//刷新数据
 			removeAllViews();
+			mHorizontalSpacingForRow.clear();
+			mChildNumForRow.clear();
+			mHeightForRow.clear();
+			mChildWeightSpacing.clear();
 			listAllCheckedIndex.clear();
 			initView();
 		}
