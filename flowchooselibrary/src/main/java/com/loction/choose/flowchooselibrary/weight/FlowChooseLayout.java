@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -48,6 +49,7 @@ public class FlowChooseLayout extends ViewGroup {
 	public static final int CHECK_TYPE_END = 0x004;
 
 	private View lastView;
+	private int lastPosition;
 
 
 	public static final int SPACING_AUTO = -65536;
@@ -113,6 +115,7 @@ public class FlowChooseLayout extends ViewGroup {
 				if (state != CHECK_TYPE_START) {
 					if (!isAllMultiSelect) {
 						lastView = itemview;
+						lastPosition = i;
 					}
 					listAllCheckedIndex.add(i);
 				}
@@ -127,7 +130,7 @@ public class FlowChooseLayout extends ViewGroup {
 					if (itemview.getTag() == null || !(itemview.getTag() instanceof Integer)) {
 						itemview.setTag(CHECK_TYPE_START);
 					}
-					if()
+
 					int state = (int) itemview.getTag();
 					int nextState = -1;
 					switch (state) {
@@ -138,6 +141,15 @@ public class FlowChooseLayout extends ViewGroup {
 						case CHECK_TYPE_START:
 							nextState = CHECK_TYPE_CENTER;
 							listAllCheckedIndex.add(finalI);
+							if (!isAllMultiSelect && lastView != null && lastView != itemview) {
+								lastView.setTag(CHECK_TYPE_START);
+								adapter.onChangeState(lastView, lastPosition, CHECK_TYPE_START);
+							}
+							if (!isAllMultiSelect && itemview != lastView) {
+								lastView = itemview;
+								lastPosition = finalI;
+							}
+
 							break;
 						case CHECK_TYPE_CENTER:
 							nextState = CHECK_TYPE_END;
@@ -154,6 +166,7 @@ public class FlowChooseLayout extends ViewGroup {
 					if (onChooseItemClick != null) {
 						onChooseItemClick.onItemDataListener(finalI, itemview, state);
 					}
+
 				}
 			});
 			addView(itemview);
@@ -617,6 +630,10 @@ public class FlowChooseLayout extends ViewGroup {
 	public void setDefaultCheckd(Map<Integer, Integer> defaultCheck) {
 		if (defaultState == null) {
 			defaultState = new HashMap<>();
+		}
+		defaultState.clear();
+		if (!isAllMultiSelect&&defaultCheck.size()>1) {
+			throw new RuntimeException("sign mulit not  more default");
 		}
 		defaultState.putAll(defaultCheck);
 	}
