@@ -121,7 +121,7 @@ public class FlowChooseLayout extends ViewGroup {
 				adapter.onChangeState(itemview, i, state);
 			} else {
 				itemview.setTag(CHECK_TYPE_START);
-				adapter.onChangeState(itemview,i,CHECK_TYPE_START);
+				adapter.onChangeState(itemview, i, CHECK_TYPE_START);
 			}
 			final int finalI = i;
 			itemview.setOnClickListener(new OnClickListener() {
@@ -136,15 +136,18 @@ public class FlowChooseLayout extends ViewGroup {
 					switch (state) {
 						case CHECK_TYPE_END:
 							nextState = CHECK_TYPE_START;
+							defaultState.put(finalI, CHECK_TYPE_START);
 							listAllCheckedIndex.remove(new Integer(finalI));
 							break;
 						case CHECK_TYPE_START:
 							nextState = CHECK_TYPE_CENTER;
+							defaultState.put(finalI, CHECK_TYPE_CENTER);
 							listAllCheckedIndex.add(finalI);
 							if (!isAllMultiSelect && lastView != null && lastView != itemview) {
 								lastView.setTag(CHECK_TYPE_START);
 								adapter.onChangeState(lastView, lastPosition, CHECK_TYPE_START);
 								listAllCheckedIndex.remove(new Integer(lastPosition));
+								defaultState.remove(lastPosition);
 							}
 							if (!isAllMultiSelect && itemview != lastView) {
 								lastView = itemview;
@@ -154,6 +157,7 @@ public class FlowChooseLayout extends ViewGroup {
 							break;
 						case CHECK_TYPE_CENTER:
 							nextState = CHECK_TYPE_END;
+							defaultState.put(finalI, CHECK_TYPE_END);
 							break;
 						default:
 							throw new RuntimeException("flowLayout error of matching type  \n" +
@@ -459,7 +463,7 @@ public class FlowChooseLayout extends ViewGroup {
 	}
 
 	private int getChildSpacing(int widthMeasureSpec, int heightMeasureSpec, int measuredHeight, int childSpacing, int windowWidth, int mode, int startIndex) {
-		if (isWeight && weightNum > 0 ) {
+		if (isWeight && weightNum > 0) {
 			if (mode == MeasureSpec.EXACTLY) {
 				final int i = setChildRow(startIndex, (startIndex + weightNum) < getChildCount() ?
 								startIndex + weightNum : getChildCount(), widthMeasureSpec,
@@ -631,7 +635,7 @@ public class FlowChooseLayout extends ViewGroup {
 			defaultState = new HashMap<>();
 		}
 		defaultState.clear();
-		if (!isAllMultiSelect&&defaultCheck.size()>1) {
+		if (!isAllMultiSelect && defaultCheck.size() > 1) {
 			throw new RuntimeException("sign mulit not  more default");
 		}
 		defaultState.putAll(defaultCheck);

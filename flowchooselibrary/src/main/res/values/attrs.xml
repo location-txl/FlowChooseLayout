@@ -28,6 +28,7 @@
 		<attr name="weightNum" format="integer" />
 		<!--设定是否多选 默认为单选-->
 		<attr name="isMultiSelect" />
+
 		<attr name="adapter"/>
 	</declare-styleable>
 </resources>
