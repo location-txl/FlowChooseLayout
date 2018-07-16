@@ -311,7 +311,6 @@ public class FlowChooseLayout extends ViewGroup {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		LogUtils.e("onMeasure");
 		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
 		int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -321,8 +320,6 @@ public class FlowChooseLayout extends ViewGroup {
 		mHeightForRow.clear();
 
 		int measuredHeight = 0, measuredWidth = 0, childCount = getChildCount();
-		LogUtils.d("childcount===>" + childCount);
-		LogUtils.d("weightCount===>" + weightNum);
 		//行宽  最大行高度 每行个数
 		int rowWidth = 0, maxChildHeightInRow = 0, childNumInRow = 0;
 		//总行宽
@@ -335,10 +332,9 @@ public class FlowChooseLayout extends ViewGroup {
 		//获取到测量的宽度
 		final int windowWidth = MeasureSpec.getSize(widthMeasureSpec);
 		final int mode = MeasureSpec.getMode(widthMeasureSpec);
-		Log.e("Test", "size==" + windowWidth);
+		//1.01增加权重属性  后面需要对其优化
 		getChildSpacing(widthMeasureSpec, heightMeasureSpec, measuredHeight, childSpacing, windowWidth, mode, 0);
 		float tmpSpacing = childSpacing == SPACING_AUTO ? 0 : childSpacing;
-		Log.e("Test", "tmpSpac==" + tmpSpacing);
 		for (int i = 0; i < childCount; i++) {
 			View child = getChildAt(i);
 			if (child.getVisibility() == GONE) {
@@ -357,10 +353,8 @@ public class FlowChooseLayout extends ViewGroup {
 			}
 
 			int childWidth = child.getMeasuredWidth() + horizontalMargin;
-			Log.e("Test", "dui==" + child.getMeasuredWidth());
 			int childHeight = child.getMeasuredHeight() + verticalMargin;
 			if (allowFlow && rowWidth + childWidth > rowSize) { // Need flow to next row
-				Log.e("TAG", "换行==" + i);
 				if (isWeight) {
 					mHorizontalSpacingForRow.add(getSpacingForRow(mChildWeightSpacing.get(mHorizontalSpacingForRow.size()), rowSize, rowWidth, childNumInRow));
 				} else {
