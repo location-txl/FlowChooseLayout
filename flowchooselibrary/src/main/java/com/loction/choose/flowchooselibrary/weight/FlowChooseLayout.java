@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.support.annotation.IntDef;
+import android.support.annotation.IntRange;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -14,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.loction.choose.flowchooselibrary.R;
 import com.loction.choose.flowchooselibrary.listener.OnChooseItemClick;
-import com.loction.choose.flowchooselibrary.util.LogUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 
 /**
@@ -41,12 +42,7 @@ public class FlowChooseLayout extends ViewGroup {
 	private DataObserver dataObserver;
 
 	private FlowAdapter adapter;
-	/**
-	 * 三种状态
-	 */
-	public static final int CHECK_TYPE_START = 0x002;
-	public static final int CHECK_TYPE_CENTER = 0x003;
-	public static final int CHECK_TYPE_END = 0x004;
+
 
 	private View lastView;
 	private int lastPosition;
@@ -80,8 +76,6 @@ public class FlowChooseLayout extends ViewGroup {
 	private boolean isAdapter;
 	private String key;
 
-	private Map<Integer, Integer> defaultState;
-
 
 	public void setAdapter(FlowAdapter flowAdapter) {
 		if (dataObserver == null) {
@@ -108,66 +102,53 @@ public class FlowChooseLayout extends ViewGroup {
 			//设置验证锁
 			itemview.setTag(KEY_LOCK, key);
 			//获取默认状态
-			if (defaultState != null && defaultState.containsKey(i)) {
-				Integer state = defaultState.get(i);
-				itemview.setTag(state);
-				if (state != CHECK_TYPE_START) {
-					if (!isAllMultiSelect) {
-						lastView = itemview;
-						lastPosition = i;
-					}
-					listAllCheckedIndex.add(i);
+			if (defaultList.contains(i)) {
+				itemview.setTag(true);
+				if (!isAllMultiSelect) {
+					lastView = itemview;
+					lastPosition = i;
 				}
-				adapter.onChangeState(itemview, i, state);
+				listAllCheckedIndex.add(i);
+				adapter.onChangeState(itemview, i, true);
 			} else {
-				itemview.setTag(CHECK_TYPE_START);
-				adapter.onChangeState(itemview,i,CHECK_TYPE_START);
+				itemview.setTag(false);
+				adapter.onChangeState(itemview, i, false);
 			}
 			final int finalI = i;
 			itemview.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (itemview.getTag() == null || !(itemview.getTag() instanceof Integer)) {
-						itemview.setTag(CHECK_TYPE_START);
+					if (!isAllMultiSelect && lastView != null && lastView == itemview) {
+						return;
 					}
 
-					int state = (int) itemview.getTag();
-					int nextState = -1;
-					switch (state) {
-						case CHECK_TYPE_END:
-							nextState = CHECK_TYPE_START;
-							listAllCheckedIndex.remove(new Integer(finalI));
-							break;
-						case CHECK_TYPE_START:
-							nextState = CHECK_TYPE_CENTER;
-							listAllCheckedIndex.add(finalI);
-							if (!isAllMultiSelect && lastView != null && lastView != itemview) {
-								lastView.setTag(CHECK_TYPE_START);
-								adapter.onChangeState(lastView, lastPosition, CHECK_TYPE_START);
-								listAllCheckedIndex.remove(new Integer(lastPosition));
-							}
-							if (!isAllMultiSelect && itemview != lastView) {
-								lastView = itemview;
-								lastPosition = finalI;
-							}
+					boolean state = (boolean) itemview.getTag();
+					if (state) {
+						listAllCheckedIndex.remove(new Integer(finalI));
+						defaultList.remove(new Integer(finalI));
+					} else {
+						defaultList.add(finalI);
+						listAllCheckedIndex.add(finalI);
+						if (lastView != null && lastView != itemview && !isAllMultiSelect) {
 
-							break;
-						case CHECK_TYPE_CENTER:
-							nextState = CHECK_TYPE_END;
-							break;
-						default:
-							throw new RuntimeException("flowLayout error of matching type  \n" +
-									" you may send " +
-									"email to tttx0307@163.com");
+							//单选
+							lastView.setTag(false);
+							if (adapter != null) {
+								adapter.onChangeState(lastView, lastPosition, false);
+							}
+							defaultList.remove(new Integer(lastPosition));
+							listAllCheckedIndex.remove(new Integer(lastPosition));
+							lastView = itemview;
+							lastPosition = finalI;
+						}
 					}
-					itemview.setTag(nextState);
+					itemview.setTag(!state);
 					if (adapter != null) {
-						adapter.onChangeState(itemview, finalI, nextState);
+						adapter.onChangeState(itemview, finalI, !state);
 					}
 					if (onChooseItemClick != null) {
-						onChooseItemClick.onItemDataListener(finalI, itemview, state);
+						onChooseItemClick.onItemDataListener(finalI, itemview, !state);
 					}
-
 				}
 			});
 			addView(itemview);
@@ -215,6 +196,7 @@ public class FlowChooseLayout extends ViewGroup {
 
 
 	private List<Integer> listAllCheckedIndex;
+	private List<Integer> defaultList;
 
 	/**
 	 * 是否三级选择
@@ -250,7 +232,7 @@ public class FlowChooseLayout extends ViewGroup {
 
 		super(context, attrs);
 		listAllCheckedIndex = new ArrayList<>();
-
+		defaultList = new ArrayList<>();
 		this.mContext = context;
 		TypedArray a = context.getTheme().obtainStyledAttributes(
 				attrs, R.styleable.FlowChooseLayout, 0, 0);
@@ -453,7 +435,7 @@ public class FlowChooseLayout extends ViewGroup {
 	}
 
 	private int getChildSpacing(int widthMeasureSpec, int heightMeasureSpec, int measuredHeight, int childSpacing, int windowWidth, int mode, int startIndex) {
-		if (isWeight && weightNum > 0 ) {
+		if (isWeight && weightNum > 0) {
 			if (mode == MeasureSpec.EXACTLY) {
 				final int i = setChildRow(startIndex, (startIndex + weightNum) < getChildCount() ?
 								startIndex + weightNum : getChildCount(), widthMeasureSpec,
@@ -486,7 +468,6 @@ public class FlowChooseLayout extends ViewGroup {
 			}
 		}
 		childSpacing = (windowWidth - allViewWidth) / (weightNum - 1);
-		LogUtils.d("weigh   childSpacing===>" + childSpacing);
 		mChildWeightSpacing.add(childSpacing);
 		if (endIndex < getChildCount()) {
 			setChildRow(endIndex, (endIndex + weightNum) < getChildCount() ? endIndex + weightNum :
@@ -620,15 +601,11 @@ public class FlowChooseLayout extends ViewGroup {
 	}
 
 	@SuppressLint("UseSparseArrays")
-	public void setDefaultCheckd(Map<Integer, Integer> defaultCheck) {
-		if (defaultState == null) {
-			defaultState = new HashMap<>();
-		}
-		defaultState.clear();
-		if (!isAllMultiSelect&&defaultCheck.size()>1) {
+	public void setDefaultCheckd(Integer... index) {
+		if (!isAllMultiSelect && index.length > 1) {
 			throw new RuntimeException("sign mulit not  more default");
 		}
-		defaultState.putAll(defaultCheck);
+		defaultList.addAll(Arrays.asList(index));
 	}
 
 	class DataObserver extends DataSetObserver {
@@ -670,18 +647,12 @@ public class FlowChooseLayout extends ViewGroup {
 		if (adapter == null) {
 			return;
 		}
-		View view = adapter.getView(FlowChooseLayout.this, null, position);
+		View view = adapter.getView(FlowChooseLayout.this, childAt, position);
 		view.setTag(KEY_LOCK, key);
 		view.setTag(childAt.getTag());
-		adapter.onChangeState(view, position, (Integer) view.getTag());
+		adapter.onChangeState(view, position, (Boolean) view.getTag());
 		removeViewAt(position);
 		addView(view, position);
-	}
-
-
-	@IntDef({CHECK_TYPE_START, CHECK_TYPE_CENTER, CHECK_TYPE_END})
-	@Retention(RetentionPolicy.SOURCE)
-	public @interface FlowState {
 	}
 
 

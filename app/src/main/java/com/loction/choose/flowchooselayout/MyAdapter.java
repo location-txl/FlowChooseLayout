@@ -33,9 +33,9 @@ public class MyAdapter extends FlowAdapter<DataBean> {
 	@Override
 	public View getView(ViewGroup parent, View view, int position) {
 		View contentView = null;
-		if(view!=null){
+		if (view != null) {
 			contentView = view;
-		}else{
+		} else {
 			contentView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_flow, parent, false);
 		}
 		TextView textView = contentView.findViewById(R.id.view_content);
@@ -45,25 +45,16 @@ public class MyAdapter extends FlowAdapter<DataBean> {
 
 
 	@Override
-	public void onChangeState(View view, int position, int state) {
-		TextView textView =view.findViewById(R.id.view_content);
+	public void onChangeState(View view, int position, boolean state) {
+		TextView textView = view.findViewById(R.id.view_content);
 
-
-		switch (state) {
-			case FlowChooseLayout.CHECK_TYPE_START:
-				view.setBackgroundColor(Color.BLUE);
-				textView.setText("选择");
-				break;
-			case FlowChooseLayout.CHECK_TYPE_CENTER:
-				view.setBackgroundColor(Color.RED);
-				textView.setText("已开启");
-				break;
-			case FlowChooseLayout.CHECK_TYPE_END:
-				view.setBackgroundColor(Color.YELLOW);
-				textView.setText("已关闭");
-				break;
-			default:
-				LogUtils.d("未知类型");
+		if (state) {
+			view.setBackgroundColor(Color.RED);
+			textView.setText("已开启");
+		} else {
+			view.setBackgroundColor(Color.BLUE);
+			textView.setText("选择");
 		}
+
 	}
 }
