@@ -84,8 +84,8 @@ public interface IApdater {
 	 *
 	 * @param view
 	 * @param position
-	 * @param state
+	 * @param isChecked 是否选中  true选中  false选中
 	 */
-	void onChangeState(View view, int position, @FlowChooseLayout.FlowState int state);
+	void onChangeState(View view, int position,boolean isChecked);
 
 }

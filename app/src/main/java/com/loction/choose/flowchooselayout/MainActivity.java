@@ -32,11 +32,8 @@ public class MainActivity extends AppCompatActivity {
 			list.add(dataBean);
 		}
 		myAdapter = new MyAdapter(list);
-		Map<Integer, Integer> de = new HashMap<>();
-		de.put(0, FlowChooseLayout.CHECK_TYPE_CENTER);
-//		de.put(1, FlowChooseLayout.CHECK_TYPE_END);
 		flowChooseLayout.setAdapter(myAdapter);
-		flowChooseLayout.setDefaultCheckd(de);
+		flowChooseLayout.setDefaultCheckd(0);
 		myAdapter.notifyDataSetChanged();
 		findViewById(R.id.id_btn).setOnClickListener(new View.OnClickListener() {
 			@Override

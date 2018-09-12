@@ -58,7 +58,7 @@ public abstract class FlowAdapter<T> implements IApdater {
 	}
 
 	@Override
-	public void onChangeState(View view, int position, int state) {
+	public void onChangeState(View view, int position, boolean isChecked) {
 
 	}
 }

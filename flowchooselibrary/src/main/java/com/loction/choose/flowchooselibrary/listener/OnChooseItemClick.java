@@ -8,7 +8,7 @@ import android.view.View;
 
 public interface OnChooseItemClick {
 
-    void onItemDataListener(int position, View view, int type);
+    void onItemDataListener(int position, View view, boolean isChecked);
 
 
 }
