@@ -6,7 +6,7 @@ FlowChooseLayout  是一款 基于流体布局的多选单选控件
 
 FlowChooseLayout自去年11月份发布以来  经历了多次重大版本的更新
 
-1. 2017年11月  第一版(FlowChooseLayout)[https://github.com/TXLLocation/FlowChooseLayout]发布只支持setList方式 样式支持TextView
+1. 2017年11月  第一版(https://github.com/TXLLocation/FlowChooseLayou)[FlowLayout]发布只支持setList方式 样式支持TextView
 
     在今年我们重构了FlowChooseLayout代码  支持任何view 所有样式由开发者自己规划
 
@@ -28,13 +28,46 @@ FlowChooseLayout自去年11月份发布以来  经历了多次重大版本的更
 > 在xlm声明
 
 ```xml
-
+<com.loction.choose.flowchooselibrary.weight.FlowChooseLayout
+	android:id="@+id/id_attr"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	app:flow="true"
+	app:isMultiSelect="true"
+	app:rowSpacing="10dp"
+	app:childSpacing="10dp"/>
 ```
 
 > 自定义属性
 
 ```xml
-
+<declare-styleable name="FlowChooseLayout">
+		<!--是否流体布局-->
+		<attr name="flow" format="boolean" />
+		<!--每个view之间宽度 如果设置权重则此效果无效-->
+		<attr name="childSpacing" format="enum|dimension">
+			<enum name="auto" value="-65536" />
+		</attr>
+		<!--最后一行字view的间距-->
+		<attr name="childSpacingForLastRow" format="enum|dimension">
+			<enum name="auto" value="-65536" />
+			<enum name="align" value="-65537" />
+		</attr>
+		<attr name="rowSpacing" format="enum|dimension">
+			<enum name="auto" value="-65536" />
+		</attr>
+		<!--排列方式 是否从右边开始布局  默认左边-->
+		<attr name="rtl" format="boolean" />
+		<attr name="maxRows" format="integer" />
+		<!--设置权重  则宽度必须为math或者固定数值-->
+		<attr name="weight" format="boolean" />
+		<!--均分数目   weight为false时无效-->
+		<attr name="weightNum" format="integer" />
+		<!--设定是否多选 默认为单选-->
+		<attr name="isMultiSelect" />
+		<!--是否使用适配器模式-->
+		<attr name="adapter"/>
+	</declare-styleable>
 ```
 
 > java代码  自定义adaptetr继承FlowAdapter<T> 类
