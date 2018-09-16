@@ -6,7 +6,7 @@ FlowChooseLayout  是一款 基于流体布局的多选单选控件
 
 FlowChooseLayout自去年11月份发布以来  经历了多次重大版本的更新
 
-1. 2017年11月  第一版[FlowLayout](https://github.com/TXLLocation/FlowChooseLayou)发布只支持setList方式 样式支持TextView
+1. 2017年11月  第一版[FlowChooseLayout](https://github.com/TXLLocation/FlowChooseLayout)发布只支持setList方式 样式支持TextView
 
     在今年我们重构了FlowChooseLayout代码  支持任何view 所有样式由开发者自己规划
 
@@ -20,7 +20,7 @@ FlowChooseLayout自去年11月份发布以来  经历了多次重大版本的更
 
    > 效果
 
-   ![](C:\Users\Administrator\Desktop\7c81504a-b352-4e8d-9cb8-30411886054d.gif)
+   ![](https://github.com/TLocation/FlowChooseLayout/blob/master/7c81504a-b352-4e8d-9cb8-30411886054d.gif)
 
 
 #### 使用方式
