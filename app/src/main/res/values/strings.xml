@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">FlowChooseLayout</string>
+    <string-array name="flow_demo">
+        <item>国内大牛博客集合</item>
+        <item>国外大牛博客集合</item>
+        <item>jcenter仓库</item>
+        <item>google仓库</item>
+        <item>鸿洋的博客</item>
+        <item>郭霖的博客</item>
+        <item>今天最火的开源项目</item>
+        <item>最新项目</item>
+        <item>鸿洋公众号文章聚合</item>
+        <item>干货集中营</item>
+        <item>掘金</item>
+        <item>开发者头条</item>
+        <item>segmentfault</item>
+        <item>Android开源项目解析</item>
+        <item>Android开发热门专题</item>
+        <item>androiddevtools</item>
+        <item>Android面试相关</item>
+        <item>极客导航</item>
+    </string-array>
 </resources>

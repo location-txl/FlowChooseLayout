@@ -7,17 +7,16 @@
 	tools:context="com.loction.choose.flowchooselayout.MainActivity">
 
 	<com.loction.choose.flowchooselibrary.weight.FlowChooseLayout
-		android:id="@+id/id_attr"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		app:flow="true"
-		app:isMultiSelect="false"
-		app:rowSpacing="10dp"
-		app:weight="true"
-		app:weightNum="4">
+	android:id="@+id/id_attr"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	app:flow="true"
+	app:isMultiSelect="true"
+	app:rowSpacing="10dp"
+	app:childSpacing="10dp"/>
 
 
-	</com.loction.choose.flowchooselibrary.weight.FlowChooseLayout>
+
 
 	<Button
 		android:id="@+id/id_btn"

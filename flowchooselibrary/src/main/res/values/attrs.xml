@@ -13,6 +13,7 @@
 		<attr name="childSpacing" format="enum|dimension">
 			<enum name="auto" value="-65536" />
 		</attr>
+		<!--最后一行字view的间距-->
 		<attr name="childSpacingForLastRow" format="enum|dimension">
 			<enum name="auto" value="-65536" />
 			<enum name="align" value="-65537" />
@@ -20,6 +21,7 @@
 		<attr name="rowSpacing" format="enum|dimension">
 			<enum name="auto" value="-65536" />
 		</attr>
+		<!--排列方式 是否从右边开始布局  默认左边-->
 		<attr name="rtl" format="boolean" />
 		<attr name="maxRows" format="integer" />
 		<!--设置权重  则宽度必须为math或者固定数值-->
@@ -28,6 +30,7 @@
 		<attr name="weightNum" format="integer" />
 		<!--设定是否多选 默认为单选-->
 		<attr name="isMultiSelect" />
+		<!--是否使用适配器模式-->
 		<attr name="adapter"/>
 	</declare-styleable>
 </resources>

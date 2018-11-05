@@ -29,19 +29,7 @@ public interface IApdater {
 	 */
 	View getView(ViewGroup parent, View view, int position);
 
-//
-//	/**
-//	 * 绑定父控件
-//	 *
-//	 * @param flowChooseLayout
-//	 */
-//	void bindParent(FlowChooseLayout flowChooseLayout);
-//
-//
-//	/**
-//	 * 解绑父控件
-//	 */
-//	void unBindParent();
+
 
 	/**
 	 * 注册观察者

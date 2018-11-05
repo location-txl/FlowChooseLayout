@@ -47,13 +47,10 @@ public class MyAdapter extends FlowAdapter<DataBean> {
 	@Override
 	public void onChangeState(View view, int position, boolean state) {
 		TextView textView = view.findViewById(R.id.view_content);
-
 		if (state) {
 			view.setBackgroundColor(Color.RED);
-			textView.setText("已开启");
 		} else {
 			view.setBackgroundColor(Color.BLUE);
-			textView.setText("选择");
 		}
 
 	}

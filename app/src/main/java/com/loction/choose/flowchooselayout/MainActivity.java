@@ -26,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
 		textView = findViewById(R.id.id_content);
 		final FlowChooseLayout flowChooseLayout = findViewById(R.id.id_attr);
 		final List<DataBean> list = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
+		String[] stringArray = getResources().getStringArray(R.array.flow_demo);
+		for (int i = 0; i < stringArray.length; i++) {
 			DataBean dataBean = new DataBean();
-			dataBean.setName("你好" + i);
+dataBean.setName(stringArray[i]);
 			list.add(dataBean);
 		}
 		myAdapter = new MyAdapter(list);
-		flowChooseLayout.setAdapter(myAdapter);
 		flowChooseLayout.setDefaultCheckd(0);
-		myAdapter.notifyDataSetChanged();
+		flowChooseLayout.setAdapter(myAdapter);
 		findViewById(R.id.id_btn).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {

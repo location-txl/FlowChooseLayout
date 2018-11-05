@@ -28,8 +28,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 /**
- * 项目名称: 新医疗(HD)
- * 类描述:  自定义流体布局
+ * 项目名称: FlowChooseLayout
  * 创建人: localadmin（龙）
  * 创建时间: 2017/8/16 10:52
  * 修改人:
