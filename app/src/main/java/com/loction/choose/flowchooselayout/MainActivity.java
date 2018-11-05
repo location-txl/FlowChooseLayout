@@ -5,14 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.loction.choose.flowchooselibrary.util.LogUtils;
 import com.loction.choose.flowchooselibrary.weight.FlowChooseLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +47,6 @@ dataBean.setName(stringArray[i]);
 			public void onClick(View view) {
 
 				List<Integer> allCheckedIndex = flowChooseLayout.getAllCheckedIndex();
-				LogUtils.i("choose===>" + "选中===》" + allCheckedIndex.toString());
 				textView.setText("已经选中的索引\n");
 				textView.append(allCheckedIndex.toString());
 			}

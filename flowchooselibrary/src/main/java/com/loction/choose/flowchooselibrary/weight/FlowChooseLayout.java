@@ -1,3 +1,18 @@
+/*
+ * Copyright 2018 location
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.loction.choose.flowchooselibrary.weight;
 
 import android.annotation.SuppressLint;
@@ -7,7 +22,6 @@ import android.database.DataSetObserver;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.View;
@@ -28,12 +42,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 /**
- * 项目名称: FlowChooseLayout
- * 创建人: localadmin（龙）
- * 创建时间: 2017/8/16 10:52
- * 修改人:
- * 修改内容:
- * 修改时间:
+ * 流体布局容器 在xml申明  建议采用适配器模式
  */
 public class FlowChooseLayout extends ViewGroup {
 
@@ -246,9 +255,6 @@ public class FlowChooseLayout extends ViewGroup {
 			isWeight = a.getBoolean(R.styleable.FlowChooseLayout_weight, false);
 			if (isWeight) {
 				weightNum = a.getInt(R.styleable.FlowChooseLayout_weightNum, 0);
-				if (weightNum > 0) {
-					Log.e("Test", "width==" + getWidth() + "\nmessure" + getMeasuredWidth());
-				}
 			}
 			//最后一行子view的间距
 			try {
@@ -357,8 +363,6 @@ public class FlowChooseLayout extends ViewGroup {
 
 				childNumInRow++;
 				if (isWeight) {
-//					if()
-					Log.e("GHF", "width===" + mChildWeightSpacing.get(mHorizontalSpacingForRow.size()));
 					rowWidth += childWidth + mChildWeightSpacing.get(mHorizontalSpacingForRow.size());
 				} else {
 
@@ -447,9 +451,7 @@ public class FlowChooseLayout extends ViewGroup {
 	private int setChildRow(int startIndex, int endIndex, int widthMeasureSpec, int heightMeasureSpec, int measuredHeight, int windowWidth) {
 		int allViewWidth = 0;
 		int childSpacing = 0;
-		Log.e("mn", "个数===" + getChildCount());
 		for (int j = startIndex; j < endIndex; j++) {
-			Log.e("Test", "spec==" + j);
 
 			View ch = getChildAt(j);
 
@@ -473,8 +475,6 @@ public class FlowChooseLayout extends ViewGroup {
 					getChildCount
 							(), widthMeasureSpec, heightMeasureSpec, measuredHeight, windowWidth);
 		}
-//        mChildSpacing = childSpacing;
-		Log.e("Test", "spec==" + childSpacing);
 		return endIndex;
 	}
 

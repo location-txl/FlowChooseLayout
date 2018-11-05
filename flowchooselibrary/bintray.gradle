@@ -1,0 +1,24 @@
+apply plugin: 'com.novoda.bintray-release'
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+    tasks.withType(Javadoc) {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}
+
+publish {
+    userOrg = 'location'//bintray.com用户名
+    groupId = 'com.location'//jcenter上的路径
+    artifactId = 'flowChooseLayout'//项目名称
+    publishVersion = '1.0.2'//版本号
+    desc = '这是一个Android自定义流体单选多选布局'//描述
+    website = 'https://github.com/TLocation/FlowChooseLayout'//网站
+}

@@ -1,6 +1,9 @@
 ## FlowChooseLayout
 
-
+#### 导入
+```groovy
+implementation 'com.location:flowChooseLayout:1.0.2'
+```
 
 FlowChooseLayout  是一款 基于流体布局的多选单选控件
 
@@ -25,7 +28,7 @@ FlowChooseLayout自去年11月份发布以来  经历了多次重大版本的更
 
 #### 使用方式
 
-> 在xlm声明
+> 在xml声明
 
 ```xml
 <com.loction.choose.flowchooselibrary.weight.FlowChooseLayout

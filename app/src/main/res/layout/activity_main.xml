@@ -11,11 +11,9 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	app:flow="true"
-	app:isMultiSelect="true"
+	app:isMultiSelect="false"
 	app:rowSpacing="10dp"
 	app:childSpacing="10dp"/>
-
-
 
 
 	<Button

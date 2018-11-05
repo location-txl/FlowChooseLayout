@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.loction.choose.flowchooselibrary.util.LogUtils;
 import com.loction.choose.flowchooselibrary.weight.FlowAdapter;
-import com.loction.choose.flowchooselibrary.weight.FlowChooseLayout;
 
 import java.util.List;
 
