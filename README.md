@@ -7,24 +7,6 @@ implementation 'com.location:flowChooseLayout:1.0.2'
 
 FlowChooseLayout  是一款 基于流体布局的多选单选控件
 
-FlowChooseLayout自去年11月份发布以来  经历了多次重大版本的更新
-
-1. 2017年11月  第一版[FlowChooseLayout](https://github.com/TXLLocation/FlowChooseLayout)发布只支持setList方式 样式支持TextView
-
-    在今年我们重构了FlowChooseLayout代码  支持任何view 所有样式由开发者自己规划
-
-2. 2018年8月  我们正式重构了FlowChooseLayout代码  
-
-   - 舍弃之前的setList方法 
-   - 全局使用适配器方法，采用观察者模式 一个适配器控制多个FlowLayout
-   - 重写了之前权重的逻辑  可以像Lainlayout根据当前的布局找到更合适的大小而不是于之前采用最大权重的方式
-   - 内部舍弃创建view 目前FlowChooseLayout只参与view的展示与点击
-   - 对于之前的addView方式 我们并不是一竿子打掉 两种方式随意切换
-
-   > 效果
-
-   ![](https://github.com/TLocation/FlowChooseLayout/blob/master/7c81504a-b352-4e8d-9cb8-30411886054d.gif)
-
 
 #### 使用方式
 
